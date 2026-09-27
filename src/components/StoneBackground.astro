@@ -68,6 +68,7 @@ const dash = '46 14 12 14 30 14 64 14';
       )
     }
   </svg>
+  {variant === 'home' && <canvas class="stone-bg__gl" data-stone-gl></canvas>}
   <div class="stone-bg__shade"></div>
 </div>
 
@@ -93,6 +94,25 @@ const dash = '46 14 12 14 30 14 64 14';
   .stone-bg__shade {
     position: absolute;
     inset: 0;
+  }
+  /* Warstwa 3D — pojawia się dopiero po wyrenderowaniu pierwszej klatki. */
+  .stone-bg__gl {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+  .stone-bg.is-3d .stone-bg__gl {
+    opacity: 1;
+  }
+  .stone-bg__svg {
+    transition: opacity 1.4s ease;
+  }
+  .stone-bg.is-3d .stone-bg__svg {
+    opacity: 0 !important;
   }
   .stone-bg--home .stone-bg__shade {
     background:

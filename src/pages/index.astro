@@ -11,11 +11,14 @@ const first = slides[0];
 ---
 
 <Base intro current="home" bodyClass="page-home">
-  <main class="home">
+  <main id="main" class="home">
     <StoneBackground variant="home" />
 
     <section class="featured reveal" style="--d:2" aria-label="Wybrane projekty" data-slider>
-      <GlyphTile d={first.glyph} class="featured__tile" />
+      <a href="/projekty" class="featured__link" aria-label="Zobacz projekty" tabindex="-1">
+        <GlyphTile d={first.glyph} class="featured__tile" />
+        <span class="featured__glint" aria-hidden="true"></span>
+      </a>
       <div class="featured__info">
         <div class="featured__text">
           <span class="pill">WYBRANY PROJEKT</span>
@@ -44,8 +47,8 @@ const first = slides[0];
     </section>
 
     <div class="home__head">
-      <h1 class="home__tagline reveal" style="--d:3">{site.tagline}</h1>
-      <div class="home__rule reveal" style="--d:3"></div>
+      <h1 class="home__tagline reveal" style="--d:3" data-scramble>{site.tagline}</h1>
+      <div class="home__rule"></div>
     </div>
 
       <dl class="facts">
@@ -82,6 +85,7 @@ const first = slides[0];
           </button>
           <span class="ticker__text" aria-live="polite"><span data-f="n">{first.n}</span>/{total} · <span data-f="name">{first.name}</span> · <span data-f="category">{first.category}</span></span>
           <span class="muted" data-f="year">{first.year}</span>
+          <span class="ticker__progress" aria-hidden="true"><span data-progress></span></span>
         </div>
       </footer>
   </main>
@@ -90,9 +94,44 @@ const first = slides[0];
 </Base>
 
 <script>
-  type Slide = { n: string; name: string; category: string; year: string; glyph: string };
+  import { scramble } from '../scripts/scramble';
 
-  // Zegar — czas w Warszawie.
+  type Slide = { n: string; name: string; category: string; year: string; glyph: string };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ——— Tło 3D: ładowane leniwie, tylko gdy WebGL jest dostępny i nie oszczędzamy danych.
+  const gl = document.querySelector<HTMLCanvasElement>('[data-stone-gl]');
+  const bg = gl?.closest<HTMLElement>('.stone-bg');
+  const hasWebGL = (() => {
+    try {
+      const c = document.createElement('canvas');
+      return !!(c.getContext('webgl2') || c.getContext('webgl'));
+    } catch {
+      return false;
+    }
+  })();
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const slowNet = conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType || '');
+  if (gl && bg && hasWebGL && !slowNet) {
+    const boot = () =>
+      import('../scripts/stone-disc')
+        .then(({ mountStoneDisc }) => {
+          const glyphs = slidesData().map((s) => s.glyph);
+          mountStoneDisc(gl, { glyphs, reducedMotion: reduced, onReady: () => bg.classList.add('is-3d') });
+        })
+        .catch(() => {
+          /* zostaje tło SVG */
+        });
+    if ('requestIdleCallback' in window) requestIdleCallback(boot, { timeout: 1200 });
+    else setTimeout(boot, 300);
+  }
+
+  function slidesData(): Slide[] {
+    const el = document.getElementById('featured-data');
+    return el ? JSON.parse(el.textContent || '[]') : [];
+  }
+
+  // ——— Zegar — czas w Warszawie.
   const clock = document.querySelector<HTMLElement>('[data-clock]');
   const tick = () => {
     if (!clock) return;
@@ -107,15 +146,28 @@ const first = slides[0];
   tick();
   setInterval(tick, 20000);
 
-  // Karuzela wybranych projektów.
-  const dataEl = document.getElementById('featured-data');
-  const slides: Slide[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+  // ——— Hasło: efekt "dekodowania" liter po wejściu.
+  const tagline = document.querySelector<HTMLElement>('[data-scramble]');
+  if (tagline && !reduced) {
+    const delay = document.documentElement.classList.contains('show-intro') ? 1600 : 250;
+    setTimeout(() => scramble(tagline), delay);
+  }
+
+  // ——— Karuzela wybranych projektów: autoplay, klawiatura, swipe.
+  const slides = slidesData();
+  const AUTOPLAY = 7000;
+  const progress = document.querySelector<HTMLElement>('[data-progress]');
+  const root = document.querySelector<HTMLElement>('.home');
   let i = 0;
+  let timer = 0;
+  let paused = false;
+
   const render = () => {
     const s = slides[i];
     document.querySelectorAll<HTMLElement>('[data-f]').forEach((el) => {
       const k = el.dataset.f as keyof Slide;
-      el.textContent = s[k];
+      if (el.dataset.f === 'name' && !reduced) scramble(el, s[k], 450);
+      else el.textContent = s[k];
     });
     document.querySelectorAll('.featured__tile [data-glyph] path').forEach((p) => p.setAttribute('d', s.glyph));
     document.querySelectorAll<HTMLButtonElement>('[data-dot]').forEach((b, k) => {
@@ -123,19 +175,69 @@ const first = slides[0];
     });
     const tile = document.querySelector('.featured__tile');
     tile?.classList.remove('swap');
-    void (tile as HTMLElement | null)?.offsetWidth;
+    void (tile as HTMLElement | null)?.getBoundingClientRect();
     tile?.classList.add('swap');
+  };
+  const restart = () => {
+    clearTimeout(timer);
+    if (!progress) return;
+    progress.style.animation = 'none';
+    void progress.offsetWidth;
+    progress.style.animation = '';
+    if (!paused && !reduced && slides.length > 1) timer = window.setTimeout(() => go(i + 1), AUTOPLAY);
   };
   const go = (k: number) => {
     if (!slides.length) return;
     i = (k + slides.length) % slides.length;
     render();
+    restart();
   };
+  const setPaused = (p: boolean) => {
+    paused = p;
+    root?.classList.toggle('is-paused', p);
+    if (p) clearTimeout(timer);
+    else restart();
+  };
+
   document.querySelector('[data-prev]')?.addEventListener('click', () => go(i - 1));
   document.querySelector('[data-next]')?.addEventListener('click', () => go(i + 1));
   document.querySelectorAll<HTMLButtonElement>('[data-dot]').forEach((b) =>
     b.addEventListener('click', () => go(Number(b.dataset.dot))),
   );
+
+  // Pauza, gdy użytkownik ogląda kartę albo pasek.
+  document.querySelectorAll<HTMLElement>('.featured, .ticker').forEach((el) => {
+    el.addEventListener('pointerenter', () => setPaused(true));
+    el.addEventListener('pointerleave', () => setPaused(false));
+    el.addEventListener('focusin', () => setPaused(true));
+    el.addEventListener('focusout', () => setPaused(false));
+  });
+  document.addEventListener('visibilitychange', () => setPaused(document.hidden));
+
+  // Strzałki na klawiaturze.
+  document.addEventListener('keydown', (e) => {
+    if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (document.documentElement.classList.contains('menu-open')) return;
+    if (e.key === 'ArrowRight') go(i + 1);
+    if (e.key === 'ArrowLeft') go(i - 1);
+  });
+
+  // Swipe na karcie projektu.
+  let sx = 0;
+  let sy = 0;
+  const swipeEl = document.querySelector<HTMLElement>('.featured');
+  swipeEl?.addEventListener('touchstart', (e) => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, { passive: true });
+  swipeEl?.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? i + 1 : i - 1);
+  });
+
+  const introDelay = document.documentElement.classList.contains('show-intro') ? 1500 : 0;
+  setTimeout(restart, introDelay);
 </script>
 
 <style>
@@ -163,18 +265,44 @@ const first = slides[0];
     display: flex;
     gap: 16px;
   }
+  .featured__link {
+    position: relative;
+    flex-shrink: 0;
+    display: block;
+    overflow: hidden;
+  }
+  .featured__glint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 244, 225, 0.16) 50%, transparent 65%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+  .featured__link:hover .featured__glint {
+    transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transform: translateX(120%);
+  }
   .featured :global(.featured__tile) {
     flex-shrink: 0;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
     display: block;
     width: 144px;
     height: 144px;
   }
-  :global(.featured__tile.swap) [data-glyph] {
-    animation: carve 0.5s ease;
+  .featured__link:hover :global(.featured__tile) {
+    transform: scale(1.04);
+  }
+  /* Glif "wyrzeźbia się" — obrys rysuje się od zera. */
+  :global(.featured__tile.swap) [data-glyph] path {
+    stroke-dasharray: 400;
+    animation: carve 0.9s cubic-bezier(0.5, 0, 0.2, 1) both;
   }
   @keyframes carve {
     from {
-      opacity: 0;
+      stroke-dashoffset: 400;
+    }
+    to {
+      stroke-dashoffset: 0;
     }
   }
   .featured__info {
@@ -240,10 +368,21 @@ const first = slides[0];
     font-weight: 600;
     letter-spacing: 0.01em;
   }
+  .home__tagline {
+    min-height: 1.4em;
+  }
   .home__rule {
     height: 1px;
     background: var(--line);
     margin: 24px 0;
+    transform-origin: left;
+    animation: rule 1.4s cubic-bezier(0.6, 0, 0.2, 1) both;
+    animation-delay: calc(300ms + var(--intro-delay, 0ms));
+  }
+  @keyframes rule {
+    from {
+      transform: scaleX(0);
+    }
   }
   .facts {
     margin-top: 0;
@@ -296,6 +435,7 @@ const first = slides[0];
     padding-bottom: 10px;
   }
   .ticker {
+    position: relative;
     width: 470px;
     max-width: 100%;
     height: 44px;
@@ -321,6 +461,34 @@ const first = slides[0];
   }
   .ticker button:hover {
     color: var(--accent);
+  }
+  .ticker__progress {
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .ticker__progress span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transform-origin: left;
+    animation: progress 7s linear both;
+  }
+  .home.is-paused .ticker__progress span {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__progress {
+      display: none;
+    }
+  }
+  @keyframes progress {
+    from {
+      transform: scaleX(0);
+    }
   }
   .ticker__text {
     flex-grow: 1;
@@ -360,6 +528,10 @@ const first = slides[0];
       height: 104px;
       margin: 0 var(--gutter) 0;
       gap: 14px;
+    }
+    .featured__link {
+      width: 104px;
+      height: 104px;
     }
     .featured :global(.featured__tile) {
       width: 104px;

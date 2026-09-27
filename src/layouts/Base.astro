@@ -32,6 +32,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="pl_PL" />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: site.fullName,
+      jobTitle: 'Webmaster / SEO / Web Developer',
+      address: { '@type': 'PostalAddress', addressLocality: 'Toruń', addressCountry: 'PL' },
+      sameAs: [site.linkedin],
+      url: Astro.site?.toString(),
+    })} />
     {
       intro && (
         <script is:inline>
@@ -46,9 +57,31 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     }
   </head>
   <body class={bodyClass}>
+    <a href="#main" class="skip-link">PRZEJDŹ DO TREŚCI</a>
     <StoneFilters />
     {intro && <Intro />}
     <Header current={current} />
     <slot />
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+    <script>
+      // Reveal przy przewijaniu.
+      const els = document.querySelectorAll<HTMLElement>('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('in'));
+      }
+    </script>
   </body>
 </html>

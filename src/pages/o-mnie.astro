@@ -16,7 +16,7 @@ const hasEmail = !site.email.startsWith('[');
 ---
 
 <Base title="O mnie" current="o-mnie" description="Doświadczenie, umiejętności i kontakt — Mateusz Wirkus, webmaster i SEO.">
-  <main class="about">
+  <main id="main" class="about">
     <StoneBackground variant="about" opacity={0.6} />
 
     <div class="about__left">
@@ -33,6 +33,7 @@ const hasEmail = !site.email.startsWith('[');
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 21 L21 7 M10 7 H21 V18"></path></svg>
         </a>
         <div class="contact__links mono">
+          <button type="button" class="contact__copy" data-copy={site.email}>KOPIUJ E-MAIL</button>
           <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
           <a href={site.cv}>CV [PDF] ↗</a>
         </div>
@@ -101,6 +102,28 @@ const hasEmail = !site.email.startsWith('[');
     </footer>
   </main>
 </Base>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  let hide = 0;
+  const show = (msg: string) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(hide);
+    hide = window.setTimeout(() => toast.classList.remove('show'), 1800);
+  };
+  btn?.addEventListener('click', async () => {
+    const text = btn.dataset.copy || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      show('SKOPIOWANO: ' + text);
+    } catch {
+      show(text);
+    }
+  });
+</script>
 
 <style>
   .about {
@@ -173,10 +196,20 @@ const hasEmail = !site.email.startsWith('[');
     font-size: 12px;
     letter-spacing: 0.08em;
   }
-  .contact__links a {
+  .contact__links a,
+  .contact__copy {
     padding: 10px 0;
   }
-  .contact__links a:hover {
+  .contact__copy {
+    border: 0;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .contact__links a:hover,
+  .contact__copy:hover {
     color: var(--accent);
   }
 
@@ -201,6 +234,31 @@ const hasEmail = !site.email.startsWith('[');
     padding: 14px 0;
     border-top: 1px solid var(--line);
     font-size: 14px;
+  }
+  .row {
+    position: relative;
+    transition: padding-left 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform 0.3s ease;
+  }
+  .row:hover {
+    padding-left: 18px;
+  }
+  .row:hover::before {
+    transform: scale(1);
+  }
+  .row:hover .row__role {
+    color: var(--fg-strong);
   }
   .row__period {
     font-size: 12px;

@@ -19,7 +19,7 @@ export const site = {
 };
 
 export const about = {
-  lead: 'Tworzę, utrzymuję i pozycjonuję strony internetowe — od firmowych wizytówek po sklepy e-commerce.',
+  lead: 'Tworzę, utrzymuję i pozycjonuję strony internetowe — od firmowych wizytówek po sklepy e‑commerce.',
   body: 'Na co dzień pracuję w dziale SEO w Pikseo i realizuję strony dla firmy oraz klientów. Łączę zaplecze administratora IT z pracą developera, a obecnie rozwijam się w kierunku cyberbezpieczeństwa.',
 };
 
