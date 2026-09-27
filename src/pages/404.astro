@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import StoneBackground from '../components/StoneBackground.astro';
+---
+
+<Base title="404" current="home">
+  <main class="nf">
+    <StoneBackground variant="intro" opacity={0.4} />
+    <div class="nf__inner">
+      <span class="label">( 404 )</span>
+      <h1>NIC TU NIE WYRYTO.</h1>
+      <a href="/" class="more-link">← WRÓĆ NA STRONĘ GŁÓWNĄ</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    position: relative;
+    min-height: 100svh;
+    margin-top: -64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 var(--gutter);
+  }
+  .nf__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  h1 {
+    font-size: clamp(32px, 6vw, 72px);
+    font-weight: 700;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+  }
+</style>

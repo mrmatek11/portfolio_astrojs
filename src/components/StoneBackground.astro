@@ -1,0 +1,145 @@
+---
+// Pełnoekranowe tło: kamienna faktura + wyryte pierścienie.
+// variant: home | intro | about | projects | mobile
+interface Props {
+  variant?: 'home' | 'intro' | 'about' | 'projects';
+  opacity?: number;
+}
+const { variant = 'home', opacity = 1 } = Astro.props;
+const dash = '46 14 12 14 30 14 64 14';
+---
+
+<div class={`stone-bg stone-bg--${variant}`} aria-hidden="true">
+  <svg
+    class="stone-bg__svg"
+    viewBox={variant === 'projects' ? '0 0 1440 420' : '0 0 1440 900'}
+    preserveAspectRatio="xMidYMid slice"
+    style={`opacity:${opacity}`}
+  >
+    <rect x="0" y="0" width="1440" height={variant === 'projects' ? 420 : 900} filter="url(#stone)"></rect>
+
+    {
+      variant === 'home' && (
+        <>
+          <g class="rings" transform="translate(900 330) rotate(-17) scale(1 0.58)" fill="none">
+            <circle r="478" fill="#ffffff" fill-opacity="0.018" stroke="none" />
+            <circle r="560" stroke="#000000" stroke-opacity="0.75" stroke-width="7" />
+            <circle r="557" stroke="#bdb6a8" stroke-opacity="0.16" stroke-width="1.5" />
+            <circle r="532" stroke="#000000" stroke-opacity="0.6" stroke-width="3" />
+            <circle class="rings__dash" r="505" stroke="#000000" stroke-opacity="0.5" stroke-width="40" stroke-dasharray={dash} />
+            <circle r="505" stroke="#bdb6a8" stroke-opacity="0.07" stroke-width="40" stroke-dasharray="2 58" />
+            <circle r="480" stroke="#000000" stroke-opacity="0.7" stroke-width="4" />
+            <circle r="477" stroke="#bdb6a8" stroke-opacity="0.14" stroke-width="1.2" />
+            <path d="M0 0 L0 -470 M0 0 L420 -220 M0 0 L-450 -140 M0 0 L180 440 M0 0 L-300 360" stroke="#000000" stroke-opacity="0.45" stroke-width="3" />
+            <circle r="60" stroke="#000000" stroke-opacity="0.6" stroke-width="3" />
+          </g>
+          <g fill="none" stroke-linecap="round">
+            <path d="M-60 820 C 160 720, 300 600, 420 420 S 620 140, 780 40" stroke="#000000" stroke-opacity="0.55" stroke-width="30" />
+            <path d="M-63 817 C 157 717, 297 597, 417 417 S 617 137, 777 37" stroke="#bdb6a8" stroke-opacity="0.1" stroke-width="3" />
+            <path d="M1200 920 C 1140 780, 1170 660, 1270 560 S 1440 440, 1520 400" stroke="#000000" stroke-opacity="0.5" stroke-width="26" />
+            <path d="M1197 917 C 1137 777, 1167 657, 1267 557 S 1437 437, 1517 397" stroke="#bdb6a8" stroke-opacity="0.09" stroke-width="3" />
+          </g>
+        </>
+      )
+    }
+
+    {
+      variant === 'intro' && (
+        <g transform="translate(640 300) rotate(-24) scale(1 0.55)" fill="none">
+          <circle r="620" stroke="#000000" stroke-opacity="0.75" stroke-width="7" />
+          <circle r="617" stroke="#bdb6a8" stroke-opacity="0.16" stroke-width="1.5" />
+          <circle class="rings__dash" r="565" stroke="#000000" stroke-opacity="0.5" stroke-width="46" stroke-dasharray={dash} />
+          <circle r="536" stroke="#000000" stroke-opacity="0.7" stroke-width="4" />
+          <circle r="533" stroke="#bdb6a8" stroke-opacity="0.14" stroke-width="1.2" />
+          <path d="M0 0 L0 -520 M0 0 L460 -240 M0 0 L-500 -150 M0 0 L200 480" stroke="#000000" stroke-opacity="0.45" stroke-width="3" />
+        </g>
+      )
+    }
+
+    {
+      variant === 'about' && (
+        <g transform="translate(160 860) rotate(-12) scale(1 0.6)" fill="none">
+          <circle r="560" stroke="#000000" stroke-opacity="0.75" stroke-width="7" />
+          <circle r="557" stroke="#bdb6a8" stroke-opacity="0.16" stroke-width="1.5" />
+          <circle class="rings__dash" r="505" stroke="#000000" stroke-opacity="0.5" stroke-width="40" stroke-dasharray={dash} />
+          <circle r="480" stroke="#000000" stroke-opacity="0.7" stroke-width="4" />
+          <circle r="477" stroke="#bdb6a8" stroke-opacity="0.14" stroke-width="1.2" />
+        </g>
+      )
+    }
+  </svg>
+  <div class="stone-bg__shade"></div>
+</div>
+
+<style>
+  .stone-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .stone-bg--projects {
+    bottom: auto;
+    height: 420px;
+  }
+  .stone-bg__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .stone-bg__shade {
+    position: absolute;
+    inset: 0;
+  }
+  .stone-bg--home .stone-bg__shade {
+    background:
+      radial-gradient(120% 90% at 58% 36%, rgba(11, 11, 10, 0) 30%, rgba(11, 11, 10, 0.6) 72%, rgba(11, 11, 10, 0.95) 100%),
+      linear-gradient(to bottom, rgba(11, 11, 10, 0) 60%, rgba(11, 11, 10, 0.75) 100%);
+  }
+  .stone-bg--intro .stone-bg__shade {
+    background: radial-gradient(90% 80% at 50% 45%, rgba(7, 7, 6, 0.2) 0%, rgba(7, 7, 6, 0.8) 70%, rgba(7, 7, 6, 1) 100%);
+  }
+  .stone-bg--about .stone-bg__shade {
+    background: linear-gradient(to right, rgba(11, 11, 10, 0.35) 0%, rgba(11, 11, 10, 0.85) 55%, rgba(11, 11, 10, 0.96) 100%);
+  }
+  .stone-bg--projects .stone-bg__shade {
+    background: linear-gradient(to bottom, rgba(11, 11, 10, 0.2) 0%, rgba(11, 11, 10, 1) 100%);
+  }
+
+  /* Powolny obrót segmentowanego pierścienia. */
+  .rings__dash {
+    animation: ring-spin 120s linear infinite;
+  }
+  @keyframes ring-spin {
+    to {
+      /* Wielokrotność długości wzoru (208), żeby pętla była płynna. */
+      stroke-dashoffset: -3120;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .stone-bg--home .stone-bg__svg {
+      /* Na telefonie pierścień jest wyżej i mniejszy — jak w makiecie mobile. */
+      height: 72%;
+      -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+    }
+    .stone-bg--home .stone-bg__shade {
+      background:
+        radial-gradient(140% 70% at 60% 32%, rgba(11, 11, 10, 0) 25%, rgba(11, 11, 10, 0.7) 75%, rgba(11, 11, 10, 0.95) 100%),
+        linear-gradient(to bottom, rgba(11, 11, 10, 0) 50%, rgba(11, 11, 10, 0.85) 100%);
+    }
+    .stone-bg--about .stone-bg__shade {
+      background: linear-gradient(to bottom, rgba(11, 11, 10, 0.55) 0%, rgba(11, 11, 10, 0.9) 45%, rgba(11, 11, 10, 0.97) 100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rings__dash {
+      animation: none;
+    }
+  }
+</style>

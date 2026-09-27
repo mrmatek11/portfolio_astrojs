@@ -1,0 +1,403 @@
+---
+import Base from '../layouts/Base.astro';
+import StoneBackground from '../components/StoneBackground.astro';
+import GlyphTile from '../components/GlyphTile.astro';
+import { site, projects } from '../data/site';
+
+const featured = projects.filter((p) => p.featured);
+const total = String(featured.length).padStart(2, '0');
+const slides = featured.map((p, i) => ({ ...p, n: String(i + 1).padStart(2, '0') }));
+const first = slides[0];
+---
+
+<Base intro current="home" bodyClass="page-home">
+  <main class="home">
+    <StoneBackground variant="home" />
+
+    <section class="featured reveal" style="--d:2" aria-label="Wybrane projekty" data-slider>
+      <GlyphTile d={first.glyph} class="featured__tile" />
+      <div class="featured__info">
+        <div class="featured__text">
+          <span class="pill">WYBRANY PROJEKT</span>
+          <div class="featured__name" data-f="name">{first.name}</div>
+          <div class="featured__meta mono muted"><span data-f="category">{first.category}</span> · <span data-f="year">{first.year}</span></div>
+        </div>
+        <div class="featured__foot">
+          <div class="featured__dots" role="tablist" aria-label="Wybierz projekt">
+            {
+              slides.map((p, i) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-label={`Pokaż projekt ${p.n}`}
+                  aria-selected={i === 0 ? 'true' : 'false'}
+                  data-dot={i}
+                >
+                  <span />
+                </button>
+              ))
+            }
+          </div>
+          <a href="/projekty" class="more-link">ZOBACZ WIĘCEJ</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="home__head">
+      <h1 class="home__tagline reveal" style="--d:3">{site.tagline}</h1>
+      <div class="home__rule reveal" style="--d:3"></div>
+    </div>
+
+      <dl class="facts">
+        <div class="reveal" style="--d:4">
+          <dt class="label">SPECJALIZACJA</dt>
+          <dd>{site.role}</dd>
+        </div>
+        <div class="reveal facts__hide-m" style="--d:5">
+          <dt class="label">LOKALIZACJA</dt>
+          <dd>{site.location}</dd>
+        </div>
+        <div class="reveal" style="--d:6">
+          <dt class="label">STATUS</dt>
+          <dd class="facts__status"><span class="dot"></span>{site.status}</dd>
+        </div>
+        <div class="reveal facts__hide-m" style="--d:7">
+          <dt class="label">CZAS LOKALNY</dt>
+          <dd><time data-clock>--:--</time> · WARSZAWA</dd>
+        </div>
+      </dl>
+
+      <footer class="home__footer">
+        <div class="home__legal mono muted">
+          <span>© 2026 {site.name}</span>
+          <a href="/polityka-prywatnosci" class="muted">POLITYKA PRYWATNOŚCI</a>
+        </div>
+
+        <div class="ticker dashed" data-slider-bar>
+          <button type="button" aria-label="Poprzedni projekt" data-prev>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3 L5 8 L10 13"></path></svg>
+          </button>
+          <button type="button" aria-label="Następny projekt" data-next>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3 L11 8 L6 13"></path></svg>
+          </button>
+          <span class="ticker__text" aria-live="polite"><span data-f="n">{first.n}</span>/{total} · <span data-f="name">{first.name}</span> · <span data-f="category">{first.category}</span></span>
+          <span class="muted" data-f="year">{first.year}</span>
+        </div>
+      </footer>
+  </main>
+
+  <script type="application/json" id="featured-data" set:html={JSON.stringify(slides)} />
+</Base>
+
+<script>
+  type Slide = { n: string; name: string; category: string; year: string; glyph: string };
+
+  // Zegar — czas w Warszawie.
+  const clock = document.querySelector<HTMLElement>('[data-clock]');
+  const tick = () => {
+    if (!clock) return;
+    try {
+      clock.textContent = new Date().toLocaleTimeString('pl-PL', {
+        timeZone: 'Europe/Warsaw',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {}
+  };
+  tick();
+  setInterval(tick, 20000);
+
+  // Karuzela wybranych projektów.
+  const dataEl = document.getElementById('featured-data');
+  const slides: Slide[] = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+  let i = 0;
+  const render = () => {
+    const s = slides[i];
+    document.querySelectorAll<HTMLElement>('[data-f]').forEach((el) => {
+      const k = el.dataset.f as keyof Slide;
+      el.textContent = s[k];
+    });
+    document.querySelectorAll('.featured__tile [data-glyph] path').forEach((p) => p.setAttribute('d', s.glyph));
+    document.querySelectorAll<HTMLButtonElement>('[data-dot]').forEach((b, k) => {
+      b.setAttribute('aria-selected', String(k === i));
+    });
+    const tile = document.querySelector('.featured__tile');
+    tile?.classList.remove('swap');
+    void (tile as HTMLElement | null)?.offsetWidth;
+    tile?.classList.add('swap');
+  };
+  const go = (k: number) => {
+    if (!slides.length) return;
+    i = (k + slides.length) % slides.length;
+    render();
+  };
+  document.querySelector('[data-prev]')?.addEventListener('click', () => go(i - 1));
+  document.querySelector('[data-next]')?.addEventListener('click', () => go(i + 1));
+  document.querySelectorAll<HTMLButtonElement>('[data-dot]').forEach((b) =>
+    b.addEventListener('click', () => go(Number(b.dataset.dot))),
+  );
+</script>
+
+<style>
+  .home {
+    position: relative;
+    min-height: 100svh;
+    margin-top: -64px;
+    padding-top: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+  .home > :not(.stone-bg) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Karta "wybrany projekt" — prawa strona, nad linią. */
+  .featured {
+    align-self: flex-end;
+    width: 356px;
+    height: 144px;
+    margin: 0 var(--gutter) 40px 0;
+    display: flex;
+    gap: 16px;
+  }
+  .featured :global(.featured__tile) {
+    flex-shrink: 0;
+    display: block;
+    width: 144px;
+    height: 144px;
+  }
+  :global(.featured__tile.swap) [data-glyph] {
+    animation: carve 0.5s ease;
+  }
+  @keyframes carve {
+    from {
+      opacity: 0;
+    }
+  }
+  .featured__info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+  }
+  .featured__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .featured__name {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .featured__meta {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .featured__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .featured__dots {
+    display: flex;
+  }
+  .featured__dots button {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .featured__dots span {
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: rgba(217, 214, 207, 0.3);
+    transition: background 0.2s;
+  }
+  .featured__dots button[aria-selected='true'] span {
+    background: var(--accent);
+  }
+
+  .home__head,
+  .facts,
+  .home__footer {
+    margin-left: var(--gutter);
+    margin-right: var(--gutter);
+  }
+  .home__tagline {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .home__rule {
+    height: 1px;
+    background: var(--line);
+    margin: 24px 0;
+  }
+  .facts {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .facts > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .facts dd {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .facts__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  .home__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    margin-top: 72px;
+    padding-bottom: 20px;
+  }
+  .home__legal {
+    display: flex;
+    gap: 24px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding-bottom: 10px;
+  }
+  .ticker {
+    width: 470px;
+    max-width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 12px 0 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .ticker button {
+    width: 40px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .ticker button:hover {
+    color: var(--accent);
+  }
+  .ticker__text {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 1024px) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .home {
+      margin-top: -60px;
+      padding-top: 60px;
+    }
+    .home__head {
+      order: 1;
+    }
+    .facts {
+      order: 3;
+      margin-top: 28px;
+    }
+    .home__tagline {
+      font-size: 14px;
+    }
+    .home__rule {
+      margin: 20px 0;
+    }
+    .featured {
+      order: 2;
+      align-self: stretch;
+      width: auto;
+      height: 104px;
+      margin: 0 var(--gutter) 0;
+      gap: 14px;
+    }
+    .featured :global(.featured__tile) {
+      width: 104px;
+      height: 104px;
+    }
+    .featured__text {
+      gap: 8px;
+    }
+    .featured__name {
+      font-size: 14px;
+    }
+    .featured__dots {
+      display: none;
+    }
+    .featured__foot {
+      justify-content: flex-end;
+    }
+    .facts__hide-m {
+      display: none !important;
+    }
+    .facts {
+      gap: 16px;
+    }
+    .home__footer {
+      order: 4;
+      margin-top: 36px;
+      flex-direction: column-reverse;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .home__legal {
+      justify-content: space-between;
+      padding-bottom: 0;
+    }
+    .ticker {
+      width: 100%;
+      padding-left: 2px;
+      gap: 2px;
+    }
+  }
+</style>

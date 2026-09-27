@@ -1,0 +1,54 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import StoneFilters from '../components/StoneFilters.astro';
+import Intro from '../components/Intro.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'home' | 'projekty' | 'o-mnie';
+  intro?: boolean;
+  bodyClass?: string;
+}
+const { title, description = site.description, current = 'home', intro = false, bodyClass } = Astro.props;
+const fullTitle = title ? `${title} — ${site.fullName}` : `${site.fullName} — Portfolio`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0b0b0a" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="pl_PL" />
+    {
+      intro && (
+        <script is:inline>
+          try {
+            if (!sessionStorage.getItem('intro-seen')) {
+              document.documentElement.classList.add('show-intro');
+              sessionStorage.setItem('intro-seen', '1');
+            }
+          } catch (e) {}
+        </script>
+      )
+    }
+  </head>
+  <body class={bodyClass}>
+    <StoneFilters />
+    {intro && <Intro />}
+    <Header current={current} />
+    <slot />
+  </body>
+</html>

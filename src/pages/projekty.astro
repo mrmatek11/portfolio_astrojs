@@ -1,0 +1,233 @@
+---
+import Base from '../layouts/Base.astro';
+import StoneBackground from '../components/StoneBackground.astro';
+import GlyphTile from '../components/GlyphTile.astro';
+import { projects, categories } from '../data/site';
+
+const count = String(projects.length).padStart(2, '0');
+---
+
+<Base title="Projekty" current="projekty" description="Wybrane realizacje — strony WWW, sklepy internetowe i projekty SEO.">
+  <main class="projects">
+    <StoneBackground variant="projects" opacity={0.55} />
+
+    <div class="projects__head reveal">
+      <h1 class="projects__title">PROJEKTY</h1>
+      <span class="mono muted projects__count">({count})</span>
+    </div>
+
+    <div class="filters reveal" style="--d:1">
+      <div class="filters__list" role="group" aria-label="Filtruj projekty">
+        <button type="button" class="filter" aria-pressed="true" data-filter="*">WSZYSTKIE</button>
+        {
+          categories.map((c) => (
+            <button type="button" class="filter" aria-pressed="false" data-filter={c}>
+              {c}
+            </button>
+          ))
+        }
+      </div>
+      <span class="label">WYBRANE REALIZACJE 2022–2026</span>
+    </div>
+
+    <div class="grid">
+      {
+        projects.map((p, k) => {
+          const n = String(k + 1).padStart(2, '0');
+          const Tag = p.url ? 'a' : 'article';
+          return (
+            <Tag
+              class="card reveal"
+              style={`--d:${k + 2}`}
+              data-category={p.category}
+              {...(p.url ? { href: p.url, target: '_blank', rel: 'noopener' } : {})}
+            >
+              <div class="card__media">
+                <GlyphTile d={p.glyph} filter="stoneT" size="100%" offset={k} viewBox="-80 -30 304 204" class="card__tile" />
+              </div>
+              <div class="card__meta">
+                <div class="card__left">
+                  <span class="mono muted card__n">{n}</span>
+                  <div class="card__text">
+                    <h2 class="card__name">{p.name}</h2>
+                    <span class="mono muted card__tag">
+                      {p.category} · {p.year}
+                    </span>
+                  </div>
+                </div>
+                <span class="more-link">{p.url ? 'ZOBACZ ↗' : 'WKRÓTCE'}</span>
+              </div>
+            </Tag>
+          );
+        })
+      }
+    </div>
+  </main>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filter;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      cards.forEach((c) => {
+        c.hidden = f !== '*' && c.dataset.category !== f;
+      });
+    }),
+  );
+</script>
+
+<style>
+  .projects {
+    position: relative;
+    min-height: 100svh;
+    margin-top: -64px;
+    padding: 112px var(--gutter) 80px;
+  }
+  .projects > :not(.stone-bg) {
+    position: relative;
+    z-index: 1;
+  }
+  .projects__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .projects__title {
+    font-size: clamp(64px, 11.7vw, 168px);
+    line-height: 0.86;
+    font-weight: 700;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+  }
+  .projects__count {
+    font-size: 14px;
+    padding-top: 8px;
+  }
+
+  .filters {
+    margin-top: 62px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .filters__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filter {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px dashed rgba(217, 214, 207, 0.35);
+    background: transparent;
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .filter:hover {
+    border-color: var(--fg);
+  }
+  .filter[aria-pressed='true'] {
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .grid {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 24px;
+    row-gap: 32px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card[hidden] {
+    display: none;
+  }
+  .card__media {
+    height: 300px;
+    overflow: hidden;
+  }
+  .card__media :global(.card__tile) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .card:hover .card__media :global(.card__tile) {
+    transform: scale(1.03);
+  }
+  .card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .card__left {
+    display: flex;
+    gap: 14px;
+  }
+  .card__n {
+    font-size: 11px;
+    padding-top: 3px;
+  }
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card__name {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .card__tag {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .card .more-link {
+    padding: 4px 0;
+    white-space: nowrap;
+  }
+  a.card:hover .more-link {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 760px) {
+    .projects {
+      margin-top: -60px;
+      padding-top: 96px;
+    }
+    .filters {
+      margin-top: 36px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .card__media {
+      height: 240px;
+    }
+  }
+</style>

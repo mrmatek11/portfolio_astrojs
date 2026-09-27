@@ -1,0 +1,29 @@
+---
+// Wspólne filtry SVG "kamiennej" faktury — wstawiane raz na stronę.
+---
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <filter id="stone" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves="6" seed="11" result="noise"></feTurbulence>
+      <feDiffuseLighting in="noise" surfaceScale="4" diffuseConstant="1" lighting-color="#7d786f" result="lit">
+        <feDistantLight azimuth="225" elevation="42"></feDistantLight>
+      </feDiffuseLighting>
+      <feColorMatrix in="lit" type="matrix" values="0.42 0 0 0 0 0 0.41 0 0 0 0 0 0.39 0 0 0 0 0 1 0"></feColorMatrix>
+    </filter>
+    <filter id="stoneS" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="5" seed="3" result="n"></feTurbulence>
+      <feDiffuseLighting in="n" surfaceScale="3" lighting-color="#8f897e">
+        <feDistantLight azimuth="225" elevation="45"></feDistantLight>
+      </feDiffuseLighting>
+      <feColorMatrix type="matrix" values="0.55 0 0 0 0 0 0.54 0 0 0 0 0 0.51 0 0 0 0 0 1 0"></feColorMatrix>
+    </filter>
+    <filter id="stoneT" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.024" numOctaves="5" seed="5" result="n"></feTurbulence>
+      <feDiffuseLighting in="n" surfaceScale="3.5" lighting-color="#8f897e">
+        <feDistantLight azimuth="225" elevation="44"></feDistantLight>
+      </feDiffuseLighting>
+      <feColorMatrix type="matrix" values="0.5 0 0 0 0 0 0.49 0 0 0 0 0 0.46 0 0 0 0 0 1 0"></feColorMatrix>
+    </filter>
+  </defs>
+</svg>

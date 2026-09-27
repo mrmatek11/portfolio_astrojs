@@ -1,0 +1,310 @@
+---
+import Base from '../layouts/Base.astro';
+import StoneBackground from '../components/StoneBackground.astro';
+import {
+  site,
+  about,
+  experience,
+  skills,
+  education,
+  certificates,
+  languages,
+  recommendation,
+} from '../data/site';
+
+const hasEmail = !site.email.startsWith('[');
+---
+
+<Base title="O mnie" current="o-mnie" description="Doświadczenie, umiejętności i kontakt — Mateusz Wirkus, webmaster i SEO.">
+  <main class="about">
+    <StoneBackground variant="about" opacity={0.6} />
+
+    <div class="about__left">
+      <section class="intro-block">
+        <span class="label reveal">( O MNIE )</span>
+        <h1 class="about__lead reveal" style="--d:1">{about.lead}</h1>
+        <p class="about__body reveal" style="--d:2">{about.body}</p>
+      </section>
+
+      <section class="contact reveal" style="--d:3" id="kontakt" aria-labelledby="kontakt-h">
+        <h2 class="label" id="kontakt-h">KONTAKT</h2>
+        <a href={hasEmail ? `mailto:${site.email}` : '#kontakt'} class="contact__mail">
+          <span>{site.email}</span>
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 21 L21 7 M10 7 H21 V18"></path></svg>
+        </a>
+        <div class="contact__links mono">
+          <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
+          <a href={site.cv}>CV [PDF] ↗</a>
+        </div>
+      </section>
+    </div>
+
+    <div class="about__right">
+      <section class="reveal" style="--d:2">
+        <h2 class="label section-h">DOŚWIADCZENIE</h2>
+        <ol class="rows">
+          {
+            experience.map((e) => (
+              <li class="row">
+                <span class="mono muted row__period">{e.period}</span>
+                <span class="row__role">{e.role}</span>
+                <span class="row__company">{e.company}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section class="reveal" style="--d:3">
+        <h2 class="label section-h">UMIEJĘTNOŚCI</h2>
+        <ul class="chips">
+          {skills.map((s) => <li class="chip">{s}</li>)}
+        </ul>
+      </section>
+
+      <section class="duo reveal" style="--d:4">
+        <div class="duo__col">
+          <h2 class="label">EDUKACJA</h2>
+          {
+            education.map((e) => (
+              <div class="duo__item">
+                <span class="duo__title">{e.school}</span>
+                <span class="mono muted duo__sub">{e.period}</span>
+              </div>
+            ))
+          }
+        </div>
+        <div class="duo__col">
+          <h2 class="label">CERTYFIKATY</h2>
+          {
+            certificates.map((c) => (
+              <div class="duo__item">
+                <span class="duo__title">{c.name}</span>
+                <span class="mono muted duo__sub">{c.year}</span>
+              </div>
+            ))
+          }
+          <h2 class="label duo__lang">JĘZYKI</h2>
+          <span class="duo__title">{languages}</span>
+        </div>
+      </section>
+
+      <figure class="quote reveal" style="--d:5">
+        <blockquote>„{recommendation.quote}”</blockquote>
+        <figcaption class="mono muted">— REKOMENDACJA · {recommendation.author.toUpperCase()}</figcaption>
+      </figure>
+    </div>
+
+    <footer class="about__footer mono muted">
+      <span>© 2026 {site.name}</span>
+      <span>OSTATNIA AKTUALIZACJA {site.lastUpdate}</span>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  .about {
+    position: relative;
+    min-height: 100svh;
+    margin-top: -64px;
+    padding: 140px var(--gutter) 30px;
+    display: grid;
+    grid-template-columns: minmax(0, 660px) minmax(0, 656px);
+    justify-content: space-between;
+    column-gap: 76px;
+    row-gap: 64px;
+    overflow: hidden;
+  }
+  .about > :not(.stone-bg) {
+    position: relative;
+    z-index: 1;
+  }
+  .about__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 80px;
+  }
+  .intro-block {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .about__lead {
+    font-size: clamp(30px, 3.1vw, 44px);
+    line-height: 1.06;
+    font-weight: 600;
+    font-stretch: 108%;
+    letter-spacing: -0.01em;
+  }
+  .about__body {
+    max-width: 520px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .contact__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 600;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .contact__mail svg {
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  .contact__mail:hover svg {
+    transform: translate(3px, -3px);
+  }
+  .contact__links {
+    display: flex;
+    gap: 24px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .contact__links a {
+    padding: 10px 0;
+  }
+  .contact__links a:hover {
+    color: var(--accent);
+  }
+
+  .about__right {
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+  .section-h {
+    margin-bottom: 12px;
+  }
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .row__period {
+    font-size: 12px;
+  }
+  .row__role {
+    font-weight: 600;
+  }
+  .row__company {
+    color: var(--soft);
+  }
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    transition: border-color 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+  }
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .duo__col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .duo__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .duo__title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .duo__sub {
+    font-size: 12px;
+  }
+  .duo__lang {
+    margin-top: 10px;
+  }
+  .quote {
+    margin: 0;
+    padding-left: 16px;
+    border-left: 1px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+  .quote figcaption {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  .about__footer {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 1100px) {
+    .about {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 760px) {
+    .about {
+      margin-top: -60px;
+      padding-top: 104px;
+      row-gap: 56px;
+    }
+    .about__left {
+      gap: 56px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      row-gap: 4px;
+    }
+    .row__period {
+      grid-column: 1 / -1;
+    }
+    .duo {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .about__footer {
+      flex-direction: column;
+    }
+  }
+</style>

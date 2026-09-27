@@ -1,0 +1,32 @@
+---
+// Kafel z wyrytym w kamieniu glifem (144×144 w jednostkach viewBox).
+interface Props {
+  d: string;
+  size?: number | string;
+  filter?: 'stoneS' | 'stoneT';
+  class?: string;
+  // Przesunięcie próbki szumu, żeby każdy kafel miał inną fakturę.
+  offset?: number;
+  viewBox?: string;
+}
+const { d, size = 144, filter = 'stoneS', class: className, offset = 0, viewBox = '0 0 144 144' } = Astro.props;
+const ox = -200 - ((offset * 523) % 1600);
+const oy = -200 - offset * 337;
+---
+
+<svg
+  class={className}
+  width={size}
+  height={size}
+  viewBox={viewBox}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+>
+  <g transform={`translate(${ox + 200} ${oy + 200})`}>
+    <rect x={-ox - 400} y={-oy - 400} width="544" height="544" filter={`url(#${filter})`}></rect>
+  </g>
+  <g transform="translate(2 2)" fill="none" stroke-linecap="round" stroke-linejoin="round" data-glyph>
+    <path d={d} stroke="#050505" stroke-opacity="0.85" stroke-width="9"></path>
+    <path d={d} stroke="#c9c2b4" stroke-opacity="0.45" stroke-width="1.5" transform="translate(-1.5 -1.5)"></path>
+  </g>
+</svg>

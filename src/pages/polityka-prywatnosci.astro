@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Polityka prywatności" current="home">
+  <main class="legal">
+    <span class="label">( POLITYKA PRYWATNOŚCI )</span>
+    <h1>Polityka prywatności</h1>
+    <p>
+      Ta strona nie używa plików cookies śledzących ani narzędzi analitycznych. Nie zbieram żadnych danych osobowych
+      poza tymi, które sam(a) przekażesz w wiadomości e-mail.
+    </p>
+    <p>
+      Hosting strony zapewnia Vercel Inc., który może przetwarzać podstawowe logi serwera (np. adres IP) w celu
+      zapewnienia bezpieczeństwa i działania usługi.
+    </p>
+    <p>
+      W sprawach dotyczących prywatności napisz na: <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
+    <p class="mono muted">[UZUPEŁNIJ / ZWERYFIKUJ TREŚĆ PRZED PUBLIKACJĄ]</p>
+  </main>
+</Base>
+
+<style>
+  .legal {
+    max-width: 680px;
+    padding: 96px var(--gutter) 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 600;
+    font-stretch: 112%;
+  }
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--soft);
+  }
+  a {
+    border-bottom: 1px solid var(--accent);
+  }
+</style>

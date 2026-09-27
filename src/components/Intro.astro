@@ -1,0 +1,68 @@
+---
+// Ekran ładowania — pokazywany raz na sesję, tylko na stronie głównej.
+// Bez JS nie pojawia się wcale (klasę .show-intro ustawia skrypt w <head>).
+import Logo from './Logo.astro';
+import StoneBackground from './StoneBackground.astro';
+import { site } from '../data/site';
+---
+
+<div class="intro" aria-hidden="true">
+  <StoneBackground variant="intro" opacity={0.4} />
+  <div class="intro__center">
+    <Logo size={68} stroke="#b3ada1" strokeWidth={1.3} />
+    <span class="intro__title">{site.name} — PORTFOLIO</span>
+    <div class="intro__bar"><div class="intro__fill"></div></div>
+  </div>
+</div>
+
+<style>
+  .intro {
+    display: none;
+  }
+  :global(html.show-intro) .intro {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--bg-deep);
+    animation: intro-out 0.5s ease 1.25s forwards;
+  }
+  .intro__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+  }
+  .intro__title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--muted);
+    padding-left: 0.32em;
+  }
+  .intro__bar {
+    width: 120px;
+    height: 1px;
+    background: rgba(217, 214, 207, 0.15);
+  }
+  .intro__fill {
+    height: 1px;
+    width: 0;
+    background: var(--accent);
+    animation: intro-fill 1.15s cubic-bezier(0.6, 0, 0.3, 1) forwards;
+  }
+  @keyframes intro-fill {
+    to {
+      width: 100%;
+    }
+  }
+  @keyframes intro-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>
