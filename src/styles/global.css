@@ -33,6 +33,10 @@
 html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
+  /* Elementy przeglądarki w kolorach strony. */
+  scrollbar-color: #3a3833 var(--bg);
+  accent-color: var(--accent);
+  caret-color: var(--accent);
 }
 html.menu-open {
   overflow: hidden;
@@ -47,7 +51,8 @@ body {
   font-size: 14px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* clip zamiast hidden — nie tworzy kontenera przewijania (sticky działa). */
+  overflow-x: clip;
 }
 
 a {
@@ -78,6 +83,7 @@ p {
 
 .mono {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 .muted {
   color: var(--muted);
@@ -97,6 +103,7 @@ p {
   padding: 0 14px;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   border: 1px dashed rgba(217, 214, 207, 0.4);
   border-radius: 999px;
   font-size: 12px;
@@ -125,6 +132,9 @@ p {
   letter-spacing: 0.04em;
 }
 .more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -215,7 +225,8 @@ body::after {
   letter-spacing: 0.06em;
   transition: top 0.2s ease;
 }
-.skip-link:focus {
+.skip-link:focus,
+.skip-link:hover {
   top: 16px;
   color: var(--bg);
 }

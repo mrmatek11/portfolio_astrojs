@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Arrow from '../components/Arrow.astro';
 import { site, about, experience, skillGroups, education, certificates, languages, gdpr } from '../data/site';
 
 const githubLabel = site.github.replace(/^https?:\/\//, '');
@@ -9,11 +10,11 @@ const linkedinLabel = site.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(
 <Base title="CV" current="o-mnie" description="CV: Mateusz Wirkus, front-end developer. Doświadczenie, umiejętności, wykształcenie.">
   <main id="main" class="cv-page">
     <div class="cv-toolbar mono">
-      <a href="/o-mnie" class="more-link">← KRONIKA</a>
-      <button type="button" class="pill-link cv-print" data-print>POBIERZ PDF ↓</button>
+      <a href="/o-mnie" class="more-link"><Arrow dir="left" /> O MNIE</a>
+      <button type="button" class="pill-link cv-print" data-print>POBIERZ PDF <Arrow dir="down" /></button>
     </div>
 
-    <article class="cv reveal" aria-label="Curriculum vitae">
+    <article class="cv" aria-label="Curriculum vitae">
       <header class="cv__head">
         <div>
           <h1 class="cv__name">{site.fullName}</h1>
@@ -130,6 +131,7 @@ const linkedinLabel = site.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(
     align-items: center;
   }
   .cv-print {
+    gap: 8px;
     background: transparent;
     color: var(--fg);
     font-family: var(--font-mono);

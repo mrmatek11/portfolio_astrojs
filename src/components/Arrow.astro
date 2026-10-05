@@ -1,0 +1,50 @@
+---
+// Strzałka rysowana w SVG — ta sama grubość linii co reszta ikon na stronie.
+interface Props {
+  dir?: 'ne' | 'down' | 'left' | 'right';
+  size?: number;
+}
+const { dir = 'ne', size = 11 } = Astro.props;
+const paths = {
+  ne: 'M3 11 L11 3 M5 3 H11 V9',
+  down: 'M7 2 V12 M3 8 L7 12 L11 8',
+  left: 'M12 7 H2 M6 3 L2 7 L6 11',
+  right: 'M2 7 H12 M8 3 L12 7 L8 11',
+};
+---
+
+<svg
+  class={`arrow arrow--${dir}`}
+  width={size}
+  height={size}
+  viewBox="0 0 14 14"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="square"
+  aria-hidden="true"><path d={paths[dir]}></path></svg
+>
+
+<style>
+  .arrow {
+    display: inline-block;
+    flex-shrink: 0;
+    vertical-align: -0.05em;
+    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  /* Na hover strzałka przesuwa się w swoim kierunku. */
+  :global(a:hover) > .arrow--ne,
+  :global(button:hover) > .arrow--ne {
+    transform: translate(2px, -2px);
+  }
+  :global(a:hover) > .arrow--down,
+  :global(button:hover) > .arrow--down {
+    transform: translateY(2px);
+  }
+  :global(a:hover) > .arrow--left {
+    transform: translateX(-3px);
+  }
+  :global(a:hover) > .arrow--right {
+    transform: translateX(3px);
+  }
+</style>

@@ -1,15 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import StoneBackground from '../components/StoneBackground.astro';
+import Arrow from '../components/Arrow.astro';
 ---
 
 <Base title="404" current="home">
   <main id="main" class="nf">
     <StoneBackground variant="intro" opacity={0.4} />
     <div class="nf__inner">
-      <span class="label">( 404 )</span>
-      <h1>NIC TU NIE WYRYTO.</h1>
-      <a href="/" class="more-link">← WRÓĆ NA STRONĘ GŁÓWNĄ</a>
+      <h1>404. NIC TU NIE WYRYTO.</h1>
+      <a href="/" class="more-link"><Arrow dir="left" /> WRÓĆ NA STRONĘ GŁÓWNĄ</a>
     </div>
   </main>
 </Base>

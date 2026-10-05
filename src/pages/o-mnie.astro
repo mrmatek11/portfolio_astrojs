@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import StoneBackground from '../components/StoneBackground.astro';
+import Arrow from '../components/Arrow.astro';
 import {
   site,
   about,
@@ -23,7 +24,6 @@ import {
     <section class="hero">
       <StoneBackground variant="about" opacity={0.6} />
       <div class="hero__text">
-        <span class="label reveal">( O MNIE )</span>
         <h1 class="hero__lead reveal" style="--d:1">{about.lead}</h1>
         <p class="hero__body reveal" style="--d:2">{about.body}</p>
         <div class="hero__cta reveal mono" style="--d:3">
@@ -36,7 +36,7 @@ import {
 
     <!-- ——— Kronika -->
     <section class="chronicle" id="kronika" aria-labelledby="kronika-h">
-      <header class="section-head reveal">
+      <header class="section-head">
         <h2 class="section-title" id="kronika-h">KRONIKA</h2>
       </header>
 
@@ -72,13 +72,13 @@ import {
 
     <!-- ——— Umiejętności -->
     <section class="skills" aria-labelledby="skills-h">
-      <header class="section-head reveal">
+      <header class="section-head">
         <h2 class="section-title section-title--sm" id="skills-h">NARZĘDZIA</h2>
       </header>
       <dl class="skills__rows">
         {
           skillGroups.map((g, i) => (
-            <div class="skills__row reveal" style={`--d:${i}`}>
+            <div class="skills__row">
               <dt class="label">{g.name.toUpperCase()}</dt>
               <dd>{g.items.join(', ')}</dd>
             </div>
@@ -89,7 +89,7 @@ import {
 
     <!-- ——— Edukacja, certyfikaty, języki, rekomendacja -->
     <section class="facts-grid">
-      <div class="reveal">
+      <div >
         <h2 class="label">EDUKACJA</h2>
         {
           education.map((e) => (
@@ -101,7 +101,7 @@ import {
           ))
         }
       </div>
-      <div class="reveal" style="--d:1">
+      <div>
         <h2 class="label">CERTYFIKATY</h2>
         {
           certificates.map((c) => (
@@ -122,7 +122,7 @@ import {
           ))
         }
       </div>
-      <figure class="quote reveal" style="--d:2">
+      <figure class="quote">
         <blockquote>{recommendation.quote}</blockquote>
         <figcaption class="mono muted">REKOMENDACJA · {recommendation.author.toUpperCase()}</figcaption>
       </figure>
@@ -130,16 +130,16 @@ import {
 
     <!-- ——— Kontakt -->
     <section class="contact" id="kontakt" aria-labelledby="kontakt-h">
-      <h2 class="label reveal" id="kontakt-h">( KONTAKT )</h2>
-      <a href={`mailto:${site.email}`} class="contact__mail reveal" style="--d:2">
+      <h2 class="sr-only" id="kontakt-h">Kontakt</h2>
+      <a href={`mailto:${site.email}`} class="contact__mail">
         <span>{site.email}</span>
         <svg width="36" height="36" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 21 L21 7 M10 7 H21 V18"></path></svg>
       </a>
-      <div class="contact__links mono reveal" style="--d:3">
+      <div class="contact__links mono">
         <button type="button" class="contact__copy" data-copy={site.email}>KOPIUJ E-MAIL</button>
-        <a href={site.github} target="_blank" rel="noopener">GITHUB ↗</a>
-        <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
-        <a href={site.cv}>CV ↗</a>
+        <a href={site.github} target="_blank" rel="noopener">GITHUB <Arrow /></a>
+        <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN <Arrow /></a>
+        <a href={site.cv}>CV <Arrow /></a>
       </div>
     </section>
 
@@ -267,14 +267,14 @@ import {
     padding-top: 6px;
   }
   .section-title {
-    font-size: clamp(56px, 10vw, 148px);
+    font-size: clamp(56px, 8vw, 96px);
     line-height: 0.86;
     font-weight: 700;
     font-stretch: 125%;
     letter-spacing: -0.02em;
   }
   .section-title--sm {
-    font-size: clamp(44px, 6.5vw, 96px);
+    font-size: clamp(44px, 6vw, 80px);
   }
 
   /* ——— Kronika */
@@ -345,7 +345,7 @@ import {
     padding-right: 32px;
   }
   .chapter__numeral {
-    font-size: 112px;
+    font-size: 96px;
     line-height: 0.85;
     font-weight: 700;
     font-stretch: 125%;
@@ -366,7 +366,7 @@ import {
   }
   .chapter__place {
     font-size: 11px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
   }
   .chapter__body {
     padding-left: 56px;
@@ -374,8 +374,8 @@ import {
     display: flex;
     flex-direction: column;
     gap: 22px;
-    opacity: 0.45;
-    transform: translateY(16px);
+    opacity: 0.72;
+    transform: translateY(12px);
     transition:
       opacity 0.7s ease,
       transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -557,6 +557,9 @@ import {
   }
   .contact__links a,
   .contact__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 10px 0;
   }
   .contact__copy {

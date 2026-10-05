@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import Arrow from './Arrow.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -31,7 +32,7 @@ const links = [
   <div class="site-header__aside">
     <a href={site.github} class="site-header__ext" target="_blank" rel="noopener">GITHUB</a>
     <a href={site.linkedin} class="site-header__ext" target="_blank" rel="noopener">LINKEDIN</a>
-    <a href={site.cv} class="pill-link">CV ↗</a>
+    <a href={site.cv} class="pill-link">CV <Arrow /></a>
   </div>
 
   <!-- Mobile -->
@@ -47,16 +48,17 @@ const links = [
 <div id="mobile-menu" class="mobile-menu" hidden>
   <nav aria-label="Menu mobilne">
     {
-      links.map((l, i) => (
+      links.map((l) => (
         <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>
-          <span class="mono muted">0{i + 1}</span>
           {l.label}
         </a>
       ))
     }
-    <a href={site.github} target="_blank" rel="noopener"><span class="mono muted">0{links.length + 1}</span>GITHUB ↗</a>
-    <a href={site.linkedin} target="_blank" rel="noopener"><span class="mono muted">0{links.length + 2}</span>LINKEDIN ↗</a>
-    <a href={site.cv}><span class="mono muted">0{links.length + 3}</span>CV ↗</a>
+    <div class="mobile-menu__ext mono">
+      <a href={site.github} target="_blank" rel="noopener">GITHUB <Arrow /></a>
+      <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN <Arrow /></a>
+      <a href={site.cv}>CV <Arrow /></a>
+    </div>
   </nav>
 </div>
 
@@ -259,7 +261,6 @@ const links = [
   .mobile-menu a {
     display: flex;
     align-items: baseline;
-    gap: 16px;
     padding: 18px 0;
     border-bottom: 1px solid var(--line);
     font-size: 28px;
@@ -270,9 +271,21 @@ const links = [
   .mobile-menu a[aria-current='page'] {
     color: var(--accent);
   }
-  .mobile-menu .mono {
-    font-size: 11px;
+  .mobile-menu .mobile-menu__ext {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    margin-top: 28px;
+  }
+  .mobile-menu .mobile-menu__ext a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+    border: 0;
+    font-size: 12px;
     font-weight: 400;
+    font-stretch: 100%;
     letter-spacing: 0.08em;
   }
 </style>
