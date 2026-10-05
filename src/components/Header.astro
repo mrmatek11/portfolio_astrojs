@@ -8,7 +8,7 @@ interface Props {
 const { current = 'home' } = Astro.props;
 
 const links = [
-  { href: '/projekty', label: 'PROJEKTY', key: 'projekty' },
+  ...(site.showProjects ? [{ href: '/projekty', label: 'PROJEKTY', key: 'projekty' }] : []),
   { href: '/o-mnie', label: 'O MNIE', key: 'o-mnie' },
   { href: '/o-mnie#kontakt', label: 'KONTAKT', key: 'kontakt' },
 ];
@@ -54,9 +54,9 @@ const links = [
         </a>
       ))
     }
-    <a href={site.github} target="_blank" rel="noopener"><span class="mono muted">04</span>GITHUB ↗</a>
-    <a href={site.linkedin} target="_blank" rel="noopener"><span class="mono muted">05</span>LINKEDIN ↗</a>
-    <a href={site.cv}><span class="mono muted">06</span>CV ↗</a>
+    <a href={site.github} target="_blank" rel="noopener"><span class="mono muted">0{links.length + 1}</span>GITHUB ↗</a>
+    <a href={site.linkedin} target="_blank" rel="noopener"><span class="mono muted">0{links.length + 2}</span>LINKEDIN ↗</a>
+    <a href={site.cv}><span class="mono muted">0{links.length + 3}</span>CV ↗</a>
   </nav>
 </div>
 

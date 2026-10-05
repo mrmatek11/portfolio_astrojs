@@ -14,6 +14,8 @@ const first = slides[0];
   <main id="main" class="home">
     <StoneBackground variant="home" />
 
+    {
+      site.showProjects && (
     <section class="featured reveal" style="--d:2" aria-label="Wybrane projekty" data-slider>
       <a href="/projekty" class="featured__link" aria-label="Zobacz projekty" tabindex="-1">
         <GlyphTile d={first.glyph} class="featured__tile" />
@@ -45,6 +47,8 @@ const first = slides[0];
         </div>
       </div>
     </section>
+      )
+    }
 
     <div class="home__head">
       <h1 class="home__tagline reveal" style="--d:3" data-scramble>{site.tagline}</h1>
@@ -62,7 +66,7 @@ const first = slides[0];
         </div>
         <div class="reveal" style="--d:6">
           <dt class="label">STATUS</dt>
-          <dd class="facts__status"><span class="dot"></span>{site.status}</dd>
+          <dd class="facts__status"><span class={site.openForWork ? 'dot' : 'dot dot--off'}></span>{site.status}</dd>
         </div>
         <div class="reveal facts__hide-m" style="--d:7">
           <dt class="label">CZAS LOKALNY</dt>
@@ -76,6 +80,8 @@ const first = slides[0];
           <a href="/polityka-prywatnosci" class="muted">POLITYKA PRYWATNOŚCI</a>
         </div>
 
+        {
+          site.showProjects && (
         <div class="ticker dashed" data-slider-bar>
           <button type="button" aria-label="Poprzedni projekt" data-prev>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M10 3 L5 8 L10 13"></path></svg>
@@ -87,6 +93,8 @@ const first = slides[0];
           <span class="muted" data-f="year">{first.year}</span>
           <span class="ticker__progress" aria-hidden="true"><span data-progress></span></span>
         </div>
+          )
+        }
       </footer>
   </main>
 
@@ -153,7 +161,9 @@ const first = slides[0];
     setTimeout(() => scramble(tagline), delay);
   }
 
-  // ——— Karuzela wybranych projektów: autoplay, klawiatura, swipe.
+  // ——— Karuzela wybranych projektów: autoplay, klawiatura, swipe (tylko gdy sekcja projektów jest widoczna).
+  if (document.querySelector('[data-slider]')) initSlider();
+  function initSlider() {
   const slides = slidesData();
   const AUTOPLAY = 7000;
   const progress = document.querySelector<HTMLElement>('[data-progress]');
@@ -238,6 +248,7 @@ const first = slides[0];
 
   const introDelay = document.documentElement.classList.contains('show-intro') ? 1500 : 0;
   setTimeout(restart, introDelay);
+  }
 </script>
 
 <style>
@@ -412,6 +423,10 @@ const first = slides[0];
     border-radius: 999px;
     background: var(--accent);
     animation: pulse 2.4s ease-in-out infinite;
+  }
+  .dot--off {
+    background: var(--muted);
+    animation: none;
   }
   @keyframes pulse {
     50% {

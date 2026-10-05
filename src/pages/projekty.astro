@@ -4,6 +4,11 @@ import StoneBackground from '../components/StoneBackground.astro';
 import GlyphTile from '../components/GlyphTile.astro';
 import { projects, categories } from '../data/site';
 
+import { site } from '../data/site';
+
+// Sekcja ukryta — /projekty przekierowuje na stronę główną.
+if (!site.showProjects) return Astro.redirect('/');
+
 const count = String(projects.length).padStart(2, '0');
 ---
 

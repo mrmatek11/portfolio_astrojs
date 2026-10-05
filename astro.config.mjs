@@ -7,7 +7,7 @@ export default defineConfig({
   // Podmień na docelową domenę po podpięciu jej w Vercelu.
   site: 'https://wirkus.vercel.app',
   trailingSlash: 'ignore',
-  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
+  integrations: [sitemap({ filter: (page) => !page.includes('/404') && !page.includes('/projekty') })],
   // Podstrony pobierane w tle po najechaniu na link — przejścia są natychmiastowe.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   vite: {

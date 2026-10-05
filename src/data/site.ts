@@ -10,7 +10,11 @@ export const site = {
   role: 'FRONT-END DEVELOPER',
   jobTitle: 'Front-end Developer',
   location: 'TORUŃ · ZDALNIE',
-  status: 'OTWARTY NA PROJEKTY',
+  status: 'ZAMKNIĘTY NA PROJEKTY',
+  // false = status "zamknięty" (wygaszona kropka bez pulsowania).
+  openForWork: false,
+  // Sekcja projektów ukryta (nawigacja, karuzela, /projekty). Zmień na true, gdy dodasz realizacje.
+  showProjects: false,
   email: 'mateuszwirkus1@gmail.com',
   linkedin: 'https://www.linkedin.com/in/wirkusm/',
   github: 'https://github.com/mrmatek11',
