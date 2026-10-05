@@ -15,11 +15,12 @@ npm run preview
 
 Wszystkie treści są w **`src/data/site.ts`** — pola w `[NAWIASACH]` to placeholdery:
 
-- `site.email` — adres e-mail w sekcji Kontakt,
 - `projects` — nazwy, kategorie, lata i opcjonalny `url` projektów (`featured: true` = karuzela na stronie głównej),
 - `languages`, `about`, `skills`, `experience` itd.
 
-CV: wrzuć plik jako `public/cv.pdf`.
+CV: strona `/cv` generowana z tych samych danych — przycisk „POBIERZ PDF” otwiera druk (Zapisz jako PDF) w jasnym układzie A4.
+
+Kronika na stronie „O mnie” (`chronicle` w `site.ts`) — historia w rozdziałach; każdy rozdział ma tytuł, opowieść, punkty, tagi i glif.
 
 Domena: po podpięciu własnej domeny zmień `site` w `astro.config.mjs`.
 
@@ -44,7 +45,7 @@ src/
   layouts/Base.astro      <head>, nagłówek, intro
   components/             Header, Intro, StoneBackground, GlyphTile, Logo, StoneFilters
   scripts/                stone-disc.ts (3D), scramble.ts (efekt tekstu)
-  pages/                  /, /projekty, /o-mnie, /polityka-prywatnosci, 404
+  pages/                  /, /projekty, /o-mnie (kronika), /cv, /polityka-prywatnosci, 404
   styles/global.css       tokeny kolorów, fonty, wspólne klasy
 ```
 

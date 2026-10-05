@@ -29,8 +29,9 @@ const links = [
   <a href="/" class="site-header__brand">{site.name}</a>
 
   <div class="site-header__aside">
+    <a href={site.github} class="site-header__ext" target="_blank" rel="noopener">GITHUB</a>
     <a href={site.linkedin} class="site-header__ext" target="_blank" rel="noopener">LINKEDIN</a>
-    <a href={site.cv} class="pill-link">CV [PDF]</a>
+    <a href={site.cv} class="pill-link">CV ↗</a>
   </div>
 
   <!-- Mobile -->
@@ -53,8 +54,9 @@ const links = [
         </a>
       ))
     }
-    <a href={site.linkedin} target="_blank" rel="noopener"><span class="mono muted">04</span>LINKEDIN ↗</a>
-    <a href={site.cv}><span class="mono muted">05</span>CV [PDF] ↗</a>
+    <a href={site.github} target="_blank" rel="noopener"><span class="mono muted">04</span>GITHUB ↗</a>
+    <a href={site.linkedin} target="_blank" rel="noopener"><span class="mono muted">05</span>LINKEDIN ↗</a>
+    <a href={site.cv}><span class="mono muted">06</span>CV ↗</a>
   </nav>
 </div>
 

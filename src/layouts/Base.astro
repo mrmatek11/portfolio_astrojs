@@ -38,9 +38,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       '@context': 'https://schema.org',
       '@type': 'Person',
       name: site.fullName,
-      jobTitle: 'Webmaster / SEO / Web Developer',
+      jobTitle: site.jobTitle,
+      email: `mailto:${site.email}`,
+      knowsAbout: ['HTML', 'SCSS', 'JavaScript', 'React', 'Next.js', 'WordPress', 'SEO', 'Figma'],
       address: { '@type': 'PostalAddress', addressLocality: 'Toruń', addressCountry: 'PL' },
-      sameAs: [site.linkedin],
+      sameAs: [site.linkedin, site.github],
       url: Astro.site?.toString(),
     })} />
     {

@@ -1,100 +1,195 @@
 ---
 import Base from '../layouts/Base.astro';
 import StoneBackground from '../components/StoneBackground.astro';
+import GlyphTile from '../components/GlyphTile.astro';
 import {
   site,
   about,
-  experience,
-  skills,
+  stats,
+  chronicle,
+  skillGroups,
   education,
   certificates,
   languages,
   recommendation,
 } from '../data/site';
-
-const hasEmail = !site.email.startsWith('[');
 ---
 
-<Base title="O mnie" current="o-mnie" description="Doświadczenie, umiejętności i kontakt — Mateusz Wirkus, webmaster i SEO.">
+<Base
+  title="O mnie"
+  current="o-mnie"
+  description="Kronika: od technikum w Bytowie, przez freelance, po setki stron w agencji. Doświadczenie, umiejętności i kontakt — Mateusz Wirkus, front-end developer."
+>
   <main id="main" class="about">
-    <StoneBackground variant="about" opacity={0.6} />
-
-    <div class="about__left">
-      <section class="intro-block">
+    <!-- ——— Wstęp -->
+    <section class="hero">
+      <StoneBackground variant="about" opacity={0.6} />
+      <div class="hero__text">
         <span class="label reveal">( O MNIE )</span>
-        <h1 class="about__lead reveal" style="--d:1">{about.lead}</h1>
-        <p class="about__body reveal" style="--d:2">{about.body}</p>
-      </section>
-
-      <section class="contact reveal" style="--d:3" id="kontakt" aria-labelledby="kontakt-h">
-        <h2 class="label" id="kontakt-h">KONTAKT</h2>
-        <a href={hasEmail ? `mailto:${site.email}` : '#kontakt'} class="contact__mail">
-          <span>{site.email}</span>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 21 L21 7 M10 7 H21 V18"></path></svg>
-        </a>
-        <div class="contact__links mono">
-          <button type="button" class="contact__copy" data-copy={site.email}>KOPIUJ E-MAIL</button>
-          <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
-          <a href={site.cv}>CV [PDF] ↗</a>
+        <h1 class="hero__lead reveal" style="--d:1">{about.lead}</h1>
+        <p class="hero__body reveal" style="--d:2">{about.body}</p>
+        <div class="hero__cta reveal mono" style="--d:3">
+          <a href="#kronika" class="pill-link">CZYTAJ KRONIKĘ ↓</a>
+          <a href="#kontakt" class="hero__cta-link">KONTAKT</a>
         </div>
-      </section>
-    </div>
+      </div>
 
-    <div class="about__right">
-      <section class="reveal" style="--d:2">
-        <h2 class="label section-h">DOŚWIADCZENIE</h2>
-        <ol class="rows">
-          {
-            experience.map((e) => (
-              <li class="row">
-                <span class="mono muted row__period">{e.period}</span>
-                <span class="row__role">{e.role}</span>
-                <span class="row__company">{e.company}</span>
-              </li>
-            ))
-          }
+      <dl class="stats">
+        {
+          stats.map((s, i) => (
+            <div class="stat reveal" style={`--d:${i + 2}`}>
+              <dt class="stat__label mono muted">{s.label}</dt>
+              <dd class="stat__value">
+                <span data-countup>{s.value}</span>
+                <span class="stat__unit mono">{s.unit}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- ——— Kronika -->
+    <section class="chronicle" id="kronika" aria-labelledby="kronika-h">
+      <header class="section-head reveal">
+        <h2 class="section-title" id="kronika-h">KRONIKA</h2>
+        <span class="mono muted">({chronicle.length} ROZDZIAŁÓW)</span>
+      </header>
+      <p class="chronicle__intro reveal">
+        Historia wyryta warstwami — każda kolejna oparta na poprzedniej. Przewiń, żeby odsłonić rozdziały.
+      </p>
+
+      <div class="timeline" data-timeline>
+        <span class="timeline__rail" aria-hidden="true"><span class="timeline__fill" data-timeline-fill></span></span>
+        <ol class="timeline__list">
+        {
+          chronicle.map((c, i) => (
+            <li class="chapter" data-chapter>
+              <span class="chapter__node" aria-hidden="true" />
+              <div class="chapter__aside">
+                <span class="chapter__numeral" aria-hidden="true">
+                  {c.numeral}
+                </span>
+                <span class="chapter__years mono">{c.years}</span>
+                <span class="chapter__place mono muted">{c.place.toUpperCase()}</span>
+              </div>
+              <article class="chapter__body">
+                <span class="sr-only">Rozdział {c.numeral}, {c.years}.</span>
+                <div class="chapter__head">
+                  <GlyphTile d={c.glyph} size={72} offset={i + 3} class="chapter__glyph" />
+                  <div>
+                    <h3 class="chapter__title">{c.title}</h3>
+                    <p class="chapter__role">{c.role}</p>
+                  </div>
+                </div>
+                <p class="chapter__story">{c.story}</p>
+                <ul class="chapter__points">
+                  {c.points.map((p) => <li>{p}</li>)}
+                </ul>
+                <ul class="chapter__tags" aria-label="Technologie">
+                  {c.tags.map((t) => <li class="chip">{t}</li>)}
+                </ul>
+              </article>
+            </li>
+          ))
+        }
+        <li class="chapter chapter--next" data-chapter>
+          <span class="chapter__node" aria-hidden="true" />
+          <div class="chapter__aside">
+            <span class="chapter__numeral" aria-hidden="true">VI</span>
+            <span class="chapter__years mono">WKRÓTCE</span>
+          </div>
+          <div class="chapter__body">
+            <h3 class="chapter__title">Następny rozdział?</h3>
+            <p class="chapter__story">
+              Szukam projektów i zespołu, w którym front-end, wdrożenia i SEO grają do jednej bramki. Jeśli masz pomysł —
+              napiszmy go razem.
+            </p>
+            <a href="#kontakt" class="more-link">NAPISZ DO MNIE →</a>
+          </div>
+        </li>
         </ol>
-      </section>
+      </div>
+    </section>
 
-      <section class="reveal" style="--d:3">
-        <h2 class="label section-h">UMIEJĘTNOŚCI</h2>
-        <ul class="chips">
-          {skills.map((s) => <li class="chip">{s}</li>)}
-        </ul>
-      </section>
+    <!-- ——— Umiejętności -->
+    <section class="skills" aria-labelledby="skills-h">
+      <header class="section-head reveal">
+        <h2 class="section-title section-title--sm" id="skills-h">NARZĘDZIA</h2>
+      </header>
+      <dl class="skills__rows">
+        {
+          skillGroups.map((g, i) => (
+            <div class="skills__row reveal" style={`--d:${i}`}>
+              <dt class="label">{g.name.toUpperCase()}</dt>
+              <dd>
+                <ul class="chips">
+                  {g.items.map((s) => <li class="chip">{s}</li>)}
+                </ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
 
-      <section class="duo reveal" style="--d:4">
-        <div class="duo__col">
-          <h2 class="label">EDUKACJA</h2>
-          {
-            education.map((e) => (
-              <div class="duo__item">
-                <span class="duo__title">{e.school}</span>
-                <span class="mono muted duo__sub">{e.period}</span>
-              </div>
-            ))
-          }
-        </div>
-        <div class="duo__col">
-          <h2 class="label">CERTYFIKATY</h2>
-          {
-            certificates.map((c) => (
-              <div class="duo__item">
-                <span class="duo__title">{c.name}</span>
-                <span class="mono muted duo__sub">{c.year}</span>
-              </div>
-            ))
-          }
-          <h2 class="label duo__lang">JĘZYKI</h2>
-          <span class="duo__title">{languages}</span>
-        </div>
-      </section>
-
-      <figure class="quote reveal" style="--d:5">
-        <blockquote>„{recommendation.quote}”</blockquote>
+    <!-- ——— Edukacja, certyfikaty, języki, rekomendacja -->
+    <section class="facts-grid">
+      <div class="reveal">
+        <h2 class="label">EDUKACJA</h2>
+        {
+          education.map((e) => (
+            <div class="fact">
+              <span class="fact__title">{e.school}</span>
+              <span class="fact__sub">{e.place}</span>
+              <span class="mono muted fact__meta">{e.period}</span>
+            </div>
+          ))
+        }
+      </div>
+      <div class="reveal" style="--d:1">
+        <h2 class="label">CERTYFIKATY</h2>
+        {
+          certificates.map((c) => (
+            <div class="fact">
+              <span class="fact__title">{c.name}</span>
+              <span class="fact__sub">{c.issuer}</span>
+              <span class="mono muted fact__meta">{c.year}</span>
+            </div>
+          ))
+        }
+        <h2 class="label fact__gap">JĘZYKI</h2>
+        {
+          languages.map((l) => (
+            <div class="fact fact--row">
+              <span class="fact__title">{l.name}</span>
+              <span class="mono muted fact__meta">{l.level.toUpperCase()}</span>
+            </div>
+          ))
+        }
+      </div>
+      <figure class="quote reveal" style="--d:2">
+        <span class="quote__mark" aria-hidden="true">“</span>
+        <blockquote>{recommendation.quote}</blockquote>
         <figcaption class="mono muted">— REKOMENDACJA · {recommendation.author.toUpperCase()}</figcaption>
       </figure>
-    </div>
+    </section>
+
+    <!-- ——— Kontakt -->
+    <section class="contact" id="kontakt" aria-labelledby="kontakt-h">
+      <h2 class="label reveal" id="kontakt-h">( KONTAKT )</h2>
+      <p class="contact__lead reveal" style="--d:1">Masz projekt albo miejsce w zespole?</p>
+      <a href={`mailto:${site.email}`} class="contact__mail reveal" style="--d:2">
+        <span>{site.email}</span>
+        <svg width="36" height="36" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 21 L21 7 M10 7 H21 V18"></path></svg>
+      </a>
+      <div class="contact__links mono reveal" style="--d:3">
+        <button type="button" class="contact__copy" data-copy={site.email}>KOPIUJ E-MAIL</button>
+        <a href={site.github} target="_blank" rel="noopener">GITHUB ↗</a>
+        <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
+        <a href={site.cv}>CV ↗</a>
+      </div>
+    </section>
 
     <footer class="about__footer mono muted">
       <span>© 2026 {site.name}</span>
@@ -104,6 +199,67 @@ const hasEmail = !site.email.startsWith('[');
 </Base>
 
 <script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ——— Liczniki: każda liczba w napisie odlicza od zera ("500–600", "~4").
+  const countUp = (el: HTMLElement) => {
+    const target = el.textContent || '';
+    const nums = target.match(/\d+/g)?.map(Number) || [];
+    if (reduced || !nums.length) return;
+    const dur = 1400;
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 4);
+      let k = 0;
+      el.textContent = target.replace(/\d+/g, () => String(Math.round(nums[k++] * e)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const counters = document.querySelectorAll<HTMLElement>('[data-countup]');
+  const cio = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          countUp(e.target as HTMLElement);
+          cio.unobserve(e.target);
+        }
+      }
+    },
+    { threshold: 0.6 },
+  );
+  counters.forEach((c) => cio.observe(c));
+
+  // ——— Oś czasu "rzeźbi się" w trakcie przewijania; aktywny rozdział się podświetla.
+  const timeline = document.querySelector<HTMLElement>('[data-timeline]');
+  const fill = document.querySelector<HTMLElement>('[data-timeline-fill]');
+  const chapters = document.querySelectorAll<HTMLElement>('[data-chapter]');
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    if (!timeline || !fill) return;
+    const r = timeline.getBoundingClientRect();
+    const focus = window.innerHeight * 0.55;
+    const p = Math.min(1, Math.max(0, (focus - r.top) / r.height));
+    fill.style.transform = `scaleY(${p})`;
+    chapters.forEach((c) => {
+      const cr = c.getBoundingClientRect();
+      c.classList.toggle('is-lit', cr.top < focus);
+      c.classList.toggle('is-current', cr.top < focus && cr.bottom > focus);
+    });
+  };
+  const onScroll = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+
+  // ——— Kopiowanie e-maila.
   const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
   const toast = document.querySelector<HTMLElement>('[data-toast]');
   let hide = 0;
@@ -118,7 +274,7 @@ const hasEmail = !site.email.startsWith('[');
     const text = btn.dataset.copy || '';
     try {
       await navigator.clipboard.writeText(text);
-      show('SKOPIOWANO: ' + text);
+      show('SKOPIOWANO: ' + text.toUpperCase());
     } catch {
       show(text);
     }
@@ -127,147 +283,342 @@ const hasEmail = !site.email.startsWith('[');
 
 <style>
   .about {
+    margin-top: -64px;
+  }
+
+  /* ——— Wstęp */
+  .hero {
     position: relative;
     min-height: 100svh;
-    margin-top: -64px;
-    padding: 140px var(--gutter) 30px;
+    padding: 140px var(--gutter) 64px;
     display: grid;
-    grid-template-columns: minmax(0, 660px) minmax(0, 656px);
-    justify-content: space-between;
-    column-gap: 76px;
-    row-gap: 64px;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: 72px;
+    align-items: end;
     overflow: hidden;
   }
-  .about > :not(.stone-bg) {
+  .hero > :not(.stone-bg) {
     position: relative;
     z-index: 1;
   }
-  .about__left {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 80px;
-  }
-  .intro-block {
+  .hero__text {
     display: flex;
     flex-direction: column;
     gap: 28px;
+    align-self: center;
   }
-  .about__lead {
-    font-size: clamp(30px, 3.1vw, 44px);
-    line-height: 1.06;
+  .hero__lead {
+    font-size: clamp(32px, 4.2vw, 60px);
+    line-height: 1.02;
     font-weight: 600;
-    font-stretch: 108%;
-    letter-spacing: -0.01em;
+    font-stretch: 110%;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
-  .about__body {
-    max-width: 520px;
-    font-size: 15px;
-    line-height: 1.6;
+  .hero__body {
+    max-width: 560px;
+    font-size: 16px;
+    line-height: 1.65;
     color: var(--soft);
   }
-
-  .contact {
+  .hero__cta {
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .contact__mail {
-    display: inline-flex;
     align-items: center;
-    gap: 14px;
-    font-size: clamp(24px, 2.5vw, 36px);
-    font-weight: 600;
-    font-stretch: 112%;
-    letter-spacing: -0.01em;
-    overflow-wrap: anywhere;
-  }
-  .contact__mail svg {
-    flex-shrink: 0;
-    color: var(--accent);
-    transition: transform 0.2s ease;
-  }
-  .contact__mail:hover svg {
-    transform: translate(3px, -3px);
-  }
-  .contact__links {
-    display: flex;
     gap: 24px;
     font-size: 12px;
     letter-spacing: 0.08em;
   }
-  .contact__links a,
-  .contact__copy {
-    padding: 10px 0;
+  .hero__cta .pill-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
   }
-  .contact__copy {
-    border: 0;
-    background: transparent;
-    color: var(--fg);
-    font: inherit;
-    letter-spacing: inherit;
-    cursor: pointer;
-  }
-  .contact__links a:hover,
-  .contact__copy:hover {
+  .hero__cta-link:hover {
     color: var(--accent);
   }
 
-  .about__right {
+  .stats {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+  .stat {
     display: flex;
-    flex-direction: column;
-    gap: 44px;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
   }
-  .section-h {
-    margin-bottom: 12px;
+  .stat:nth-child(odd) {
+    padding-right: 20px;
+    border-right: 1px solid var(--line);
   }
-  .rows {
+  .stat:nth-child(even) {
+    padding-left: 20px;
+  }
+  .stat__value {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    font-size: clamp(32px, 3.1vw, 46px);
+    font-weight: 700;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat__value [data-countup] {
+    white-space: nowrap;
+  }
+  .stat__unit {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .stat__label {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  /* ——— Nagłówki sekcji */
+  .section-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .section-head .mono {
+    font-size: 13px;
+    padding-top: 6px;
+  }
+  .section-title {
+    font-size: clamp(56px, 10vw, 148px);
+    line-height: 0.86;
+    font-weight: 700;
+    font-stretch: 125%;
+    letter-spacing: -0.02em;
+  }
+  .section-title--sm {
+    font-size: clamp(44px, 6.5vw, 96px);
+  }
+
+  /* ——— Kronika */
+  .chronicle {
+    padding: 120px var(--gutter) 40px;
+    scroll-margin-top: 40px;
+  }
+  .chronicle__intro {
+    margin-top: 24px;
+    max-width: 460px;
+    color: var(--soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .timeline {
+    --rail: 248px;
+    position: relative;
+    margin: 72px 0 0;
+  }
+  .timeline__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid var(--line);
   }
-  .row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    padding: 14px 0;
-    border-top: 1px solid var(--line);
-    font-size: 14px;
+  .timeline__rail {
+    position: absolute;
+    left: var(--rail);
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
   }
-  .row {
+  .timeline__fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--accent), rgba(200, 184, 154, 0.4));
+    transform-origin: top;
+    transform: scaleY(0);
+    will-change: transform;
+  }
+  .chapter {
     position: relative;
-    transition: padding-left 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    padding-bottom: 96px;
   }
-  .row::before {
+  .chapter__node {
+    position: absolute;
+    left: calc(var(--rail) - 5px);
+    top: 14px;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--line-dash);
+    background: var(--bg);
+    transform: rotate(45deg);
+    transition:
+      background 0.4s ease,
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+  .chapter.is-lit .chapter__node {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .chapter.is-current .chapter__node {
+    box-shadow: 0 0 0 6px rgba(200, 184, 154, 0.15);
+  }
+  .chapter__aside {
+    position: sticky;
+    top: 110px;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 32px;
+  }
+  .chapter__numeral {
+    font-size: 112px;
+    line-height: 0.85;
+    font-weight: 700;
+    font-stretch: 125%;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(217, 214, 207, 0.28);
+    transition:
+      color 0.6s ease,
+      -webkit-text-stroke-color 0.6s ease;
+    margin-bottom: 14px;
+  }
+  .chapter.is-current .chapter__numeral {
+    -webkit-text-stroke-color: var(--accent);
+    color: rgba(200, 184, 154, 0.08);
+  }
+  .chapter__years {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .chapter__place {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .chapter__body {
+    padding-left: 56px;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    opacity: 0.45;
+    transform: translateY(16px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .chapter.is-lit .chapter__body {
+    opacity: 1;
+    transform: none;
+  }
+  :global(html:not(.js)) .chapter__body {
+    opacity: 1;
+    transform: none;
+  }
+  .chapter__head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .chapter__head :global(.chapter__glyph) {
+    flex-shrink: 0;
+    display: block;
+  }
+  .chapter__title {
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.04;
+    font-weight: 600;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+  .chapter__role {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--accent);
+  }
+  .chapter__story {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--fg);
+    max-width: 640px;
+  }
+  .chapter__points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--soft);
+  }
+  .chapter__points li {
+    position: relative;
+    padding-left: 22px;
+  }
+  .chapter__points li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
-    width: 6px;
-    height: 6px;
-    margin-top: -3px;
+    top: 0.72em;
+    width: 10px;
+    height: 1px;
     background: var(--accent);
-    transform: scale(0);
-    transition: transform 0.3s ease;
   }
-  .row:hover {
-    padding-left: 18px;
+  .chapter__tags {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
   }
-  .row:hover::before {
-    transform: scale(1);
+  .chapter--next {
+    padding-bottom: 40px;
   }
-  .row:hover .row__role {
-    color: var(--fg-strong);
+  .chapter--next .chapter__numeral {
+    -webkit-text-stroke-style: dashed;
   }
-  .row__period {
-    font-size: 12px;
+  .chapter--next .chapter__body {
+    gap: 16px;
   }
-  .row__role {
-    font-weight: 600;
+  .chapter--next .more-link {
+    align-self: flex-start;
   }
-  .row__company {
-    color: var(--soft);
+
+  /* ——— Narzędzia */
+  .skills {
+    padding: 80px var(--gutter) 40px;
+  }
+  .skills__rows {
+    margin: 48px 0 0;
+    border-top: 1px solid var(--line);
+  }
+  .skills__row {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.3s ease;
+  }
+  .skills__row:hover {
+    background: linear-gradient(to right, rgba(200, 184, 154, 0.05), transparent 60%);
+  }
+  .skills__row dd {
+    margin: 0;
   }
   .chips {
     list-style: none;
@@ -278,88 +629,236 @@ const hasEmail = !site.email.startsWith('[');
     gap: 8px;
   }
   .chip {
-    transition: border-color 0.15s;
+    transition:
+      border-color 0.15s,
+      color 0.15s;
   }
   .chip:hover {
     border-color: var(--accent);
+    color: var(--fg-strong);
   }
-  .duo {
+
+  /* ——— Fakty */
+  .facts-grid {
+    padding: 80px var(--gutter);
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 48px;
   }
-  .duo__col {
+  .facts-grid > div {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
   }
-  .duo__item {
+  .fact {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 4px;
   }
-  .duo__title {
-    font-size: 14px;
+  .fact--row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+  }
+  .fact__title {
+    font-size: 15px;
     font-weight: 600;
   }
-  .duo__sub {
-    font-size: 12px;
+  .fact__sub {
+    font-size: 13px;
+    color: var(--soft);
   }
-  .duo__lang {
-    margin-top: 10px;
+  .fact__meta {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .fact__gap {
+    margin-top: 18px;
   }
   .quote {
+    position: relative;
     margin: 0;
-    padding-left: 16px;
+    padding: 28px 0 0 28px;
     border-left: 1px solid var(--accent);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
+  }
+  .quote__mark {
+    position: absolute;
+    left: 20px;
+    top: -18px;
+    font-size: 96px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.35;
   }
   .quote blockquote {
     margin: 0;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--soft);
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--fg);
   }
   .quote figcaption {
     font-size: 11px;
     letter-spacing: 0.06em;
   }
 
+  /* ——— Kontakt */
+  .contact {
+    padding: 120px var(--gutter) 100px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    scroll-margin-top: 40px;
+  }
+  .contact__lead {
+    font-size: 18px;
+    color: var(--soft);
+  }
+  .contact__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    align-self: flex-start;
+    font-size: clamp(26px, 5.4vw, 80px);
+    font-weight: 700;
+    font-stretch: 118%;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+  .contact__mail svg {
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: transform 0.25s ease;
+  }
+  .contact__mail:hover svg {
+    transform: translate(4px, -4px);
+  }
+  .contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .contact__links a,
+  .contact__copy {
+    padding: 10px 0;
+  }
+  .contact__copy {
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .contact__links a:hover,
+  .contact__copy:hover {
+    color: var(--fg-strong);
+  }
+
   .about__footer {
-    grid-column: 1 / -1;
     display: flex;
     justify-content: space-between;
     gap: 16px;
+    padding: 0 var(--gutter) 30px;
     font-size: 11px;
     letter-spacing: 0.06em;
   }
 
+  /* ——— Responsywność */
   @media (max-width: 1100px) {
-    .about {
+    .hero {
       grid-template-columns: minmax(0, 1fr);
+      row-gap: 56px;
+      align-items: start;
+    }
+    .facts-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .quote {
+      grid-column: 1 / -1;
     }
   }
   @media (max-width: 760px) {
     .about {
       margin-top: -60px;
+    }
+    .hero {
+      min-height: 0;
       padding-top: 104px;
-      row-gap: 56px;
     }
-    .about__left {
-      gap: 56px;
+    .hero__cta {
+      flex-wrap: wrap;
     }
-    .row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      row-gap: 4px;
+    .stat:nth-child(odd) {
+      padding-right: 12px;
     }
-    .row__period {
-      grid-column: 1 / -1;
+    .stat:nth-child(even) {
+      padding-left: 12px;
     }
-    .duo {
+    .chronicle {
+      padding-top: 72px;
+    }
+    .timeline {
+      --rail: 0px;
+      margin-top: 48px;
+    }
+    .chapter {
       grid-template-columns: minmax(0, 1fr);
+      padding-left: 28px;
+      padding-bottom: 64px;
+    }
+    .chapter__node {
+      left: -5px;
+      top: 6px;
+    }
+    .chapter__aside {
+      position: static;
+      flex-direction: row;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 0 0 18px;
+    }
+    .chapter__numeral {
+      font-size: 56px;
+      margin: 0;
+    }
+    .chapter__body {
+      padding-left: 0;
+      gap: 18px;
+    }
+    .chapter__head :global(.chapter__glyph) {
+      width: 56px;
+      height: 56px;
+    }
+    .chapter__story {
+      font-size: 16px;
+    }
+    .skills__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+    .facts-grid {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 56px;
+      padding-bottom: 56px;
+    }
+    .quote blockquote {
+      font-size: 17px;
+    }
+    .contact {
+      padding-top: 80px;
+      padding-bottom: 72px;
     }
     .about__footer {
       flex-direction: column;
