@@ -20,9 +20,9 @@ Wszystkie treści są w **`src/data/site.ts`** — pola w `[NAWIASACH]` to place
 
 CV: strona `/cv` generowana z tych samych danych — przycisk „POBIERZ PDF” otwiera druk (Zapisz jako PDF) w jasnym układzie A4.
 
-Kronika na stronie „O mnie” (`chronicle` w `site.ts`) — historia w rozdziałach; każdy rozdział ma tytuł, opowieść, punkty, tagi i glif.
+Kronika na stronie „O mnie” (`chronicle` w `site.ts`) — historia w rozdziałach; każdy rozdział ma tytuł, rolę, krótką historię i punkty.
 
-Domena: po podpięciu własnej domeny zmień `site` w `astro.config.mjs`.
+Adres strony: brany automatycznie z Vercela (`VERCEL_PROJECT_PRODUCTION_URL`). Po podpięciu własnej domeny dodaj w Vercelu zmienną środowiskową `SITE_URL`, np. `https://twojadomena.pl`.
 
 ## Tło 3D
 
@@ -44,7 +44,7 @@ src/
   data/site.ts            treści
   layouts/Base.astro      <head>, nagłówek, intro
   components/             Header, Intro, StoneBackground, GlyphTile, Logo, StoneFilters
-  scripts/                stone-disc.ts (3D), scramble.ts (efekt tekstu)
+  scripts/                stone-disc.ts (3D)
   pages/                  /, /projekty, /o-mnie (kronika), /cv, /polityka-prywatnosci, 404
   styles/global.css       tokeny kolorów, fonty, wspólne klasy
 ```

@@ -51,7 +51,7 @@ const first = slides[0];
     }
 
     <div class="home__head">
-      <h1 class="home__tagline reveal" style="--d:3" data-scramble>{site.tagline}</h1>
+      <h1 class="home__tagline reveal" style="--d:3">{site.tagline}</h1>
       <div class="home__rule"></div>
     </div>
 
@@ -102,8 +102,6 @@ const first = slides[0];
 </Base>
 
 <script>
-  import { scramble } from '../scripts/scramble';
-
   type Slide = { n: string; name: string; category: string; year: string; glyph: string };
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -154,12 +152,6 @@ const first = slides[0];
   tick();
   setInterval(tick, 20000);
 
-  // ——— Hasło: efekt "dekodowania" liter po wejściu.
-  const tagline = document.querySelector<HTMLElement>('[data-scramble]');
-  if (tagline && !reduced) {
-    const delay = document.documentElement.classList.contains('show-intro') ? 1600 : 250;
-    setTimeout(() => scramble(tagline), delay);
-  }
 
   // ——— Karuzela wybranych projektów: autoplay, klawiatura, swipe (tylko gdy sekcja projektów jest widoczna).
   if (document.querySelector('[data-slider]')) initSlider();
@@ -176,8 +168,7 @@ const first = slides[0];
     const s = slides[i];
     document.querySelectorAll<HTMLElement>('[data-f]').forEach((el) => {
       const k = el.dataset.f as keyof Slide;
-      if (el.dataset.f === 'name' && !reduced) scramble(el, s[k], 450);
-      else el.textContent = s[k];
+      el.textContent = s[k];
     });
     document.querySelectorAll('.featured__tile [data-glyph] path').forEach((p) => p.setAttribute('d', s.glyph));
     document.querySelectorAll<HTMLButtonElement>('[data-dot]').forEach((b, k) => {
