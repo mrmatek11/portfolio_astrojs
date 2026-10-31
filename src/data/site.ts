@@ -18,8 +18,6 @@ export const site = {
   email: 'mateuszwirkus1@gmail.com',
   linkedin: 'https://www.linkedin.com/in/wirkusm/',
   github: 'https://github.com/mrmatek11',
-  // Wersja do druku / PDF generowana ze strony /cv.
-  cv: '/cv',
   lastUpdate: '10.2026',
   accent: '#c8b89a',
 };
@@ -108,39 +106,6 @@ export const chronicle: Chapter[] = [
   },
 ];
 
-// Doświadczenie w skrócie (CV, dane strukturalne).
-export const experience = [
-  {
-    period: '02.2026 – OBECNIE',
-    role: 'Web Developer / Webmaster',
-    company: 'Pikseo',
-    location: 'Toruń',
-    note: 'Zespół web i SEO w agencji, projekty marketingowe dla klientów.',
-    points: chronicle[4].points.concat('Praca z Claude Code; automatyzacja powtarzalnych zadań skryptami Python'),
-  },
-  {
-    period: '08.2024 – OBECNIE',
-    role: 'Freelance Web Developer',
-    company: 'Interpaste.dev',
-    location: 'Zdalnie',
-    note: '',
-    points: [
-      'Strony w Next.js, WordPress i Laravel według wymagań klienta; projekty Next.js wdrażane na Vercel',
-      'Kilka zleceń równolegle: wymagania, wycena, wdrożenie w terminie, raportowanie postępów',
-      'Domeny, serwery VPS (Apache / Nginx, cPanel), certyfikaty SSL/TLS i backupy',
-      'Zabezpieczanie stron WordPress: aktualizacje, hardening, dokumentacja zmian',
-    ],
-  },
-  {
-    period: '12.2022 – 07.2024',
-    role: 'Front-end Developer i Administrator IT',
-    company: 'Szkolenia Ekspert',
-    location: 'Bytów',
-    note: '',
-    points: chronicle[1].points,
-  },
-];
-
 export const skillGroups = [
   { name: 'Front-end', items: ['HTML5', 'CSS3', 'SCSS', 'JavaScript', 'RWD', 'mobile-first', 'Bootstrap'] },
   { name: 'Frameworki i narzędzia', items: ['React', 'Next.js', 'Laravel', 'Webpack', 'Git / GitHub'] },
@@ -168,9 +133,6 @@ export const recommendation = {
     'Consistently impressed me with his strong technical skills and dedication to our team’s success. A reliable and knowledgeable professional.',
   author: 'Szkolenia Ekspert',
 };
-
-export const gdpr =
-  'Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO).';
 
 // Glify rysowane w "kamieniu" — każdy projekt dostaje jeden kształt.
 const glyphs = [
