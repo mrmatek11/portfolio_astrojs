@@ -1,4 +1,4 @@
-# Wirkus — Portfolio
+# Portfolio
 
 Portfolio w [Astro](https://astro.build), statyczny build pod darmowy plan Vercel.
 
