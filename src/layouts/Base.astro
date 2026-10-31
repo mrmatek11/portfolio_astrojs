@@ -40,6 +40,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       name: site.fullName,
       jobTitle: site.jobTitle,
       knowsAbout: ['HTML', 'SCSS', 'JavaScript', 'React', 'Next.js', 'WordPress', 'SEO', 'Figma'],
+      address: { '@type': 'PostalAddress', addressLocality: 'Toruń', addressCountry: 'PL' },
+      sameAs: [site.linkedin, site.github],
       url: Astro.site?.toString(),
     })} />
     {

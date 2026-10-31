@@ -2,29 +2,31 @@
 // Pola w [NAWIASACH] to placeholdery do uzupełnienia.
 
 export const site = {
-  name: 'MONOLIT',
-  fullName: 'Monolit',
+  name: 'WIRKUS',
+  fullName: 'Mateusz Wirkus',
   tagline: 'SUROWA FORMA. PRECYZYJNE WYKONANIE.',
   description:
-    'Front-end developer. Strony od projektu w Figmie po wdrożenie, przebudowy na WordPress i PrestaShop, SEO techniczne.',
+    'Mateusz Wirkus, front-end developer z Torunia. Strony od projektu w Figmie po wdrożenie, przebudowy na WordPress i PrestaShop, SEO techniczne.',
   role: 'FRONT-END DEVELOPER',
   jobTitle: 'Front-end Developer',
-  location: 'ZDALNIE',
+  location: 'TORUŃ · ZDALNIE',
   status: 'ZAMKNIĘTY NA PROJEKTY',
   // false = status "zamknięty" (wygaszona kropka bez pulsowania).
   openForWork: false,
   // Sekcja projektów ukryta (nawigacja, karuzela, /projekty). Zmień na true, gdy dodasz realizacje.
   showProjects: false,
+  linkedin: 'https://www.linkedin.com/in/wirkusm/',
+  github: 'https://github.com/mrmatek11',
   lastUpdate: '10.2026',
   accent: '#c8b89a',
 };
 
 export const about = {
-  lead: 'Surowa forma. Precyzyjne wykonanie.',
-  body: 'Strony budowane od projektu do wdrożenia: mobile-first, szybkie, bezpieczne i łatwe w utrzymaniu.',
+  lead: 'Robię strony od projektu do wdrożenia. W agencji przebudowałem ich kilkaset.',
+  body: 'Front-end developer, prawie 4 lata komercyjnie. Projektuję w Figmie, koduję mobile-first w HTML, SCSS i JavaScript, pracuję w React i Next.js. Ogarniam też domeny, serwery, certyfikaty i SEO, więc stronę oddaję działającą, a nie tylko zakodowaną.',
 };
 
-// Zasady pracy w rozdziałach (strona "O mnie").
+// Kronika: historia zawodowa w rozdziałach (strona "O mnie").
 export type Chapter = {
   numeral: string;
   years: string;
@@ -38,30 +40,68 @@ export type Chapter = {
 export const chronicle: Chapter[] = [
   {
     numeral: 'I',
-    years: 'ETAP 1',
-    place: 'Projekt',
-    title: 'Makieta',
-    role: 'Figma, mobile-first',
-    story: 'Zaczynam od struktury i treści, dopiero potem od ozdób.',
-    points: ['Układ i siatka', 'Komponenty wielokrotnego użytku'],
+    years: '2018–2022',
+    place: 'Bytów',
+    title: 'Technikum',
+    role: 'Technik informatyk, ZSP Bytów',
+    story:
+      'Sieci, systemy operacyjne, bazy danych i pierwsze strony pisane od zera w notatniku. Tu złapałem, że strona to nie tylko to, co widać w przeglądarce.',
+    points: ['Kwalifikacje INF.02 i INF.03', 'Sieci, grafika, bazy danych, pierwsze strony WWW'],
   },
   {
     numeral: 'II',
-    years: 'ETAP 2',
-    place: 'Kod',
-    title: 'Wykonanie',
-    role: 'HTML, SCSS, JavaScript, React, Next.js',
-    story: 'Czysty, szybki kod bez zbędnych zależności.',
-    points: ['Dostępność i semantyka', 'PageSpeed i SEO techniczne'],
+    years: '2022–2024',
+    place: 'Bytów',
+    title: 'Pierwsza praca',
+    role: 'Front-end Developer i Administrator IT, Szkolenia Ekspert',
+    story:
+      'Dwie role naraz. Landing page sprzedażowe i newslettery HTML, a obok certyfikaty SSL, aktualizacje i backupy. Od początku robiłem i kod, i to, na czym on stoi.',
+    points: [
+      'Strony i landing page sprzedażowe (HTML5, CSS3, Bootstrap)',
+      'Newslettery HTML i kampanie mailingowe',
+      'Zmiany i poprawki na stronie firmowej w CMS Typo3',
+      'Certyfikaty SSL, aktualizacje i backupy',
+    ],
   },
   {
     numeral: 'III',
-    years: 'ETAP 3',
-    place: 'Wdrożenie',
-    title: 'Publikacja',
-    role: 'Vercel, VPS, SSL/TLS',
-    story: 'Domena, serwer, certyfikat i kopie zapasowe — strona oddawana działająca.',
-    points: ['Domeny i DNS', 'Backupy i aktualizacje'],
+    years: '2024–dziś',
+    place: 'Zdalnie',
+    title: 'Freelance',
+    role: 'Freelance Web Developer, Interpaste.dev',
+    story:
+      'Własni klienci. Zbieram wymagania, wyceniam, wdrażam w terminie, prowadzę kilka zleceń naraz. Domena, VPS, SSL i backupy są po mojej stronie.',
+    points: [
+      'Strony w Next.js, WordPress i Laravel; Next.js wdrażany na Vercel',
+      'Domeny, serwery VPS (Apache / Nginx, cPanel), SSL/TLS, backupy',
+      'Hardening i aktualizacje wdrożonych stron WordPress',
+    ],
+  },
+  {
+    numeral: 'IV',
+    years: '2025–dziś',
+    place: 'WSKZ',
+    title: 'Cyberbezpieczeństwo',
+    role: 'Studia licencjackie, WSKZ',
+    story:
+      'Stawiam serwery i zabezpieczam strony, więc chcę rozumieć, jak się je atakuje. Studiuję cyberbezpieczeństwo, w 2026 zrobiłem certyfikat Google.',
+    points: ['Cyberbezpieczeństwo, studia licencjackie (WSKZ)', 'Google Foundations of Cybersecurity (2026)'],
+  },
+  {
+    numeral: 'V',
+    years: '2026–dziś',
+    place: 'Toruń',
+    title: 'Agencja',
+    role: 'Web Developer / Webmaster, Pikseo',
+    story:
+      'Zespół web i SEO. 15–20 stron od zera, od makiety w Figmie po wdrożenie, i 500–600 istniejących przebudowanych albo poprawionych na WordPressie, PrestaShopie, Shopify i Shoperze. Do tego SEO, PageSpeed, własne wtyczki i motywy.',
+    points: [
+      '15–20 stron od zera: Figma, mobile-first (HTML, SCSS, JS), wdrożenie',
+      '500–600 przebudowanych lub zmodyfikowanych stron na różnych CMS, praca na ticketach',
+      'Monitoring, diagnoza i naprawa błędów w kodzie, motywach i wtyczkach',
+      'SEO i PageSpeed; Google Search Console, Tag Manager, GA4',
+      'Własne wtyczki, motywy i funkcje na zamówienie (PHP, JavaScript)',
+    ],
   },
 ];
 
@@ -74,6 +114,24 @@ export const skillGroups = [
   { name: 'CMS', items: ['WordPress', 'PrestaShop', 'Shopify', 'Shoper', 'Joomla', 'Typo3'] },
   { name: 'Inne', items: ['PHP', 'Python', 'Bash', 'Claude Code'] },
 ];
+
+export const education = [
+  { school: 'Cyberbezpieczeństwo, studia licencjackie', place: 'Wyższa Szkoła Kształcenia Zawodowego (WSKZ)', period: '10.2025 – OBECNIE' },
+  { school: 'Technik informatyk (INF.02, INF.03)', place: 'Zespół Szkół Ponadpodstawowych, Bytów', period: '2018–2022' },
+];
+
+export const certificates = [{ name: 'Foundations of Cybersecurity', issuer: 'Google', year: '2026' }];
+
+export const languages = [
+  { name: 'Polski', level: 'ojczysty' },
+  { name: 'Angielski', level: 'B2' },
+];
+
+export const recommendation = {
+  quote:
+    'Consistently impressed me with his strong technical skills and dedication to our team’s success. A reliable and knowledgeable professional.',
+  author: 'Szkolenia Ekspert',
+};
 
 // Glify rysowane w "kamieniu" — każdy projekt dostaje jeden kształt.
 const glyphs = [

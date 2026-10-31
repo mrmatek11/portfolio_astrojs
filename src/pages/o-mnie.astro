@@ -7,13 +7,17 @@ import {
   about,
   chronicle,
   skillGroups,
+  education,
+  certificates,
+  languages,
+  recommendation,
 } from '../data/site';
 ---
 
 <Base
   title="O mnie"
   current="o-mnie"
-  description="Metoda pracy i narzędzia."
+  description="Od technikum w Bytowie, przez freelance, po setki stron w agencji. Doświadczenie, umiejętności i kontakt: Mateusz Wirkus, front-end developer."
 >
   <main id="main" class="about">
     <!-- ——— Wstęp -->
@@ -24,6 +28,7 @@ import {
         <p class="hero__body reveal" style="--d:2">{about.body}</p>
         <div class="hero__cta reveal mono" style="--d:3">
           <a href="#kronika">KRONIKA</a>
+          <a href="#kontakt">KONTAKT</a>
         </div>
       </div>
     </section>
@@ -79,6 +84,56 @@ import {
           ))
         }
       </dl>
+    </section>
+
+    <!-- ——— Edukacja, certyfikaty, języki, rekomendacja -->
+    <section class="facts-grid">
+      <div >
+        <h2 class="label">EDUKACJA</h2>
+        {
+          education.map((e) => (
+            <div class="fact">
+              <span class="fact__title">{e.school}</span>
+              <span class="fact__sub">{e.place}</span>
+              <span class="mono muted fact__meta">{e.period}</span>
+            </div>
+          ))
+        }
+      </div>
+      <div>
+        <h2 class="label">CERTYFIKATY</h2>
+        {
+          certificates.map((c) => (
+            <div class="fact">
+              <span class="fact__title">{c.name}</span>
+              <span class="fact__sub">{c.issuer}</span>
+              <span class="mono muted fact__meta">{c.year}</span>
+            </div>
+          ))
+        }
+        <h2 class="label fact__gap">JĘZYKI</h2>
+        {
+          languages.map((l) => (
+            <div class="fact fact--row">
+              <span class="fact__title">{l.name}</span>
+              <span class="mono muted fact__meta">{l.level.toUpperCase()}</span>
+            </div>
+          ))
+        }
+      </div>
+      <figure class="quote">
+        <blockquote>{recommendation.quote}</blockquote>
+        <figcaption class="mono muted">REKOMENDACJA · {recommendation.author.toUpperCase()}</figcaption>
+      </figure>
+    </section>
+
+    <!-- ——— Kontakt -->
+    <section class="contact" id="kontakt" aria-labelledby="kontakt-h">
+      <h2 class="sr-only" id="kontakt-h">Kontakt</h2>
+      <div class="contact__links mono">
+        <a href={site.github} target="_blank" rel="noopener">GITHUB <Arrow /></a>
+        <a href={site.linkedin} target="_blank" rel="noopener">LINKEDIN <Arrow /></a>
+      </div>
     </section>
 
     <footer class="about__footer mono muted">
