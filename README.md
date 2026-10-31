@@ -1,4 +1,4 @@
-# Wirkus — Portfolio
+# Portfolio
 
 Portfolio w [Astro](https://astro.build), statyczny build pod darmowy plan Vercel.
 
@@ -18,7 +18,6 @@ Wszystkie treści są w **`src/data/site.ts`** — pola w `[NAWIASACH]` to place
 - `projects` — nazwy, kategorie, lata i opcjonalny `url` projektów (`featured: true` = karuzela na stronie głównej),
 - `languages`, `about`, `skills`, `experience` itd.
 
-CV: strona `/cv` generowana z tych samych danych — przycisk „POBIERZ PDF” otwiera druk (Zapisz jako PDF) w jasnym układzie A4.
 
 Kronika na stronie „O mnie” (`chronicle` w `site.ts`) — historia w rozdziałach; każdy rozdział ma tytuł, rolę, krótką historię i punkty.
 
@@ -45,7 +44,7 @@ src/
   layouts/Base.astro      <head>, nagłówek, intro
   components/             Header, Intro, StoneBackground, GlyphTile, Logo, StoneFilters
   scripts/                stone-disc.ts (3D)
-  pages/                  /, /projekty, /o-mnie (kronika), /cv, /polityka-prywatnosci, 404
+  pages/                  /, /projekty, /o-mnie (kronika), /polityka-prywatnosci, 404
   styles/global.css       tokeny kolorów, fonty, wspólne klasy
 ```
 
